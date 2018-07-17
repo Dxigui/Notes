@@ -240,5 +240,22 @@ $ git remote add origin git@gitgub.com:Dxigui/Notes
 $ git remote rm origin
 ```
 
+向新的空远程仓库推送
+
+```
+# -u 参数为第一次推送时加
+# 为了使本地 master 分支和远程 master 关联起来
+$ git push -u origin master
+```
+
+克隆已经存在的远程仓库
+
+```
+# 克隆
+$ git clone git@github.com:name/repository name.git
+```
+
+
+
 
 
