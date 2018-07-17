@@ -1,12 +1,12 @@
 # Git 笔记 #
 
-## Git 简介##
+##Git 简介##
 
 Git 是开源的分布式版本控制系统，由 Linus 开发，去中心服务器，每个人都有完整的代码，能够在离线状态下进行修改，还有其强大的版本控制系统，它跟踪并管理的是用户的修改而非文件。除了 Git 外还有 Mercurial、Bazaar 等分布式版本控制系统。
 
 既然有分布式，那就有集中式版本控制系统，但是集中式只有一个中心服务器，安全性能差，只能在联网条件下修改代码，且速度较慢。代表有 SVN、ClearCase 等。
 
-## Git 安装##
+##Git 安装##
 
 ### Linux ###
 
@@ -236,6 +236,9 @@ $ ssh-keygen -t rsa -C "Youremail@exmpale.com"
 # 远程仓库与本地关联
 $ git remote add origin git@gitgub.com:Dxigui/Notes
 
+# 查看远程库信息，参数 -v 查看详细信息
+$ git remote -v
+
 # 移除关联
 $ git remote rm origin
 ```
@@ -254,6 +257,215 @@ $ git push -u origin master
 # 克隆
 $ git clone git@github.com:name/repository name.git
 ```
+
+## 分支管理##
+
+### 分支管理原则###
+
+在实际开发中，master 分支是非常稳定的，只是用来发布新版本，平时不能在其分支上修改
+
+写代码一般都是在 dev 分支上，而实际开发中又不是个人行为，需要多人合作开发，所以在 dev 分支上每个人都有自己的分支，将自己的修改合并到 dev 分支上。
+
+当然除了 dev 分支还可以创建其他分支，如：处理紧急 BUG 的分支，和开发新版本的分支等
+
+### 创建和合并分支###
+
+Git 把每次提交都连成一条时间线。分支是通过指针来实现的，master 分支指针指指向时间线的最后一个节点，即最后一次提交。HEAD 指针指向的当前指针。
+
+如果新建一个分支 dev，并切换到这个分支，HEAD 指针就会指向 dev 分支
+
+```
+# 创建 dev 分支，并且换到该分支
+# -b 参数是创建并且换
+$ git checkout -b dev
+
+# 上面这条命令相当于相面两条命令
+$ git branch dev
+$ git checkout dev
+```
+
+查看当前分支
+
+```
+$ git branch
+```
+
+切换分支
+
+```
+# 实际上是 HEAD 指针冲当前分支切换到了需要切换的分支指针上
+$ git checkout <name>
+```
+
+合并分支
+
+```
+# 把 dev 分支合并到 master 分支上
+# 注意：这是 fast-forward ->快进模式，会丢失部分信息
+# 不能再分支历史上看出分支信息
+$ git merge dev
+
+# 可以用 --no-off 禁用 fast-forward 模式
+# 并加上 -m 参数让合并产生一个新的 commit
+$ git merge --no-off -m "merge with no-ff" dev
+```
+
+删除 dev 分支
+
+```
+$ git branch -d dev
+
+# 强制删除
+$ git branch -D dev
+```
+
+### 解决冲突###
+
+在合并分支的时，会出现两个分支冲突不能合并的情况，这种情况通常出现在两个分支都对同一个文件做出了修改并提交了。这时需要手动修改在进行合并。
+
+查看分支合并情况
+
+```
+# 查看合并图
+$ git log --graph --pretty=oneline --abbrev-commit
+```
+
+### 隐藏当前分支###
+
+在一个项目完成一半的时候突然遇到一个紧急 Bug 需要处理，而现在的项目却不能提交，则可以把当前工作区隐藏。
+
+```
+# 隐藏当前工作去，执行完命令后可以用 git status 查看
+# 可以多次执行，
+$ git stash
+```
+
+紧急处理完后恢复工作区继续
+
+```
+# 查看隐藏工作区，如果多次执行了 git stash
+# 会有多个隐藏工作区
+$ git stash list
+
+# 恢复工作区
+$ git stash apply
+
+# 恢复制定工作区
+$ git stash apply stash@{0}
+```
+
+删除
+
+```
+$ git stash drop
+$ git stash pop
+```
+
+### 多人协作###
+
+再多人协作时，需要在远程库中克隆，克隆的只有主分支 master 所以需要创建另外的分支 dev
+
+```
+# 在本地创建和远程分支对应的分支
+$git checkout -b dev origin/dev
+```
+
+在多人合作中，对同一个分支进行修改时，向远程仓库提交时会出现冲突，这时需要先 `pull` 把 `origin/dev` 分支抓下来，在本地合并，解决冲突再提交。如果 `git pull`  也失败了，是因为本地 dev 没有与远程 `origin/dev`  分支的链接，建立链接后在 `git pull`
+
+```
+# 建立本地 dev 与远程 origin/dev 分支链接
+$ git branch --set-upstram-to=origin/dev dev
+
+# 抓取分支
+$ git pull
+```
+
+查看日志
+
+## Git 标签##
+
+### 创建标签###
+
+```
+# 创建标签，name 为标签名，默认 HEAD 
+$ git tag <name>
+
+# 给指定 commit id 创建标题
+$ git tag <name> <commit id>
+
+# 创建带有说明的标签
+$ git tag -a <name> -m "tag info" [commit id]
+```
+
+### 查看标签信息###
+
+```
+# 查看标签信息
+$ git show <tagname>
+
+# 查看所有标签
+$ git tag
+```
+
+### 标签操作###
+
+```
+# 删除本地标签
+$ git tag -d <tagname>
+
+# 删除远程标签
+$ git push origin :refs/tags/<tagname>
+
+# 推送制定标签
+$ git push origin <tagname>
+
+# 推送所有没有推送的标签
+$ git push origin --tags
+```
+
+## 设置别名##
+
+给命令设置别名
+
+```
+$ git config --global alias.<alias> name
+# example
+$ git config --global alias.co checkout
+$ git config --global alias.ci commit
+$ git config --global alias.br branch
+```
+
+## 搭建 Git 服务器##
+
+Ubuntu
+
+```
+# 安装 git
+$ sudo apt-get install git
+
+# 创建一个 git 用户，用来运行 git 服务
+$ sudo adduser git
+
+# 创建证书登入
+# 将所有需要登录的用户公钥添加到
+$ /home/git/.ssh/authorized_keys 文件里
+
+# 初始化 Git 仓库，选一个目录，如/srv/learngit.git
+$ sudo git init --bare learngit.git
+
+# 把 owner 改为 git
+$ sudo chown -R git:git learngit.git
+
+# 禁用 shell 登录
+# 编辑 /etc/passwd 文件
+# git:x:1001:1001:,,,:/home/git:/bin/bash --->
+# git:x:1001:1001:,,,:/home/git:/bin/bit-shell
+
+# 克隆远程仓库
+$ git clone git@server:/srv/sample.git
+```
+
+
 
 
 
