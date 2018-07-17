@@ -1,12 +1,12 @@
 # Git 笔记 #
 
-##Git 简介##
+##Git 简介
 
 Git 是开源的分布式版本控制系统，由 Linus 开发，去中心服务器，每个人都有完整的代码，能够在离线状态下进行修改，还有其强大的版本控制系统，它跟踪并管理的是用户的修改而非文件。除了 Git 外还有 Mercurial、Bazaar 等分布式版本控制系统。
 
 既然有分布式，那就有集中式版本控制系统，但是集中式只有一个中心服务器，安全性能差，只能在联网条件下修改代码，且速度较慢。代表有 SVN、ClearCase 等。
 
-##Git 安装##
+##Git 安装
 
 ### Linux ###
 
@@ -35,7 +35,7 @@ $ git config --global user.email "email@example.com"
 
 `--global`  参数表示这台机器上所有 Git 仓库都使用这个用户名和邮箱。也可以指定不同仓库使用不同用户名和邮箱，在你需要设定的仓库下面执行上面的 `git config`  命令，但是不加 `--global`  参数。
 
-## Git 使用 
+## Git 使用
 
 ###  创建分支
 
@@ -258,9 +258,9 @@ $ git push -u origin master
 $ git clone git@github.com:name/repository name.git
 ```
 
-## 分支管理##
+## 分支管理
 
-### 分支管理原则###
+### 分支管理原则
 
 在实际开发中，master 分支是非常稳定的，只是用来发布新版本，平时不能在其分支上修改
 
@@ -268,7 +268,7 @@ $ git clone git@github.com:name/repository name.git
 
 当然除了 dev 分支还可以创建其他分支，如：处理紧急 BUG 的分支，和开发新版本的分支等
 
-### 创建和合并分支###
+### 创建和合并分支
 
 Git 把每次提交都连成一条时间线。分支是通过指针来实现的，master 分支指针指指向时间线的最后一个节点，即最后一次提交。HEAD 指针指向的当前指针。
 
@@ -319,7 +319,7 @@ $ git branch -d dev
 $ git branch -D dev
 ```
 
-### 解决冲突###
+### 解决冲突
 
 在合并分支的时，会出现两个分支冲突不能合并的情况，这种情况通常出现在两个分支都对同一个文件做出了修改并提交了。这时需要手动修改在进行合并。
 
@@ -330,7 +330,7 @@ $ git branch -D dev
 $ git log --graph --pretty=oneline --abbrev-commit
 ```
 
-### 隐藏当前分支###
+### 隐藏当前分支
 
 在一个项目完成一半的时候突然遇到一个紧急 Bug 需要处理，而现在的项目却不能提交，则可以把当前工作区隐藏。
 
@@ -361,7 +361,7 @@ $ git stash drop
 $ git stash pop
 ```
 
-### 多人协作###
+### 多人协作
 
 再多人协作时，需要在远程库中克隆，克隆的只有主分支 master 所以需要创建另外的分支 dev
 
@@ -382,9 +382,9 @@ $ git pull
 
 查看日志
 
-## Git 标签##
+## Git 标签
 
-### 创建标签###
+### 创建标签
 
 ```
 # 创建标签，name 为标签名，默认 HEAD 
@@ -397,7 +397,7 @@ $ git tag <name> <commit id>
 $ git tag -a <name> -m "tag info" [commit id]
 ```
 
-### 查看标签信息###
+### 查看标签信息
 
 ```
 # 查看标签信息
@@ -407,7 +407,7 @@ $ git show <tagname>
 $ git tag
 ```
 
-### 标签操作###
+### 标签操作
 
 ```
 # 删除本地标签
@@ -423,7 +423,7 @@ $ git push origin <tagname>
 $ git push origin --tags
 ```
 
-## 设置别名##
+## 设置别名
 
 给命令设置别名
 
@@ -435,7 +435,7 @@ $ git config --global alias.ci commit
 $ git config --global alias.br branch
 ```
 
-## 搭建 Git 服务器##
+## 搭建 Git 服务器
 
 Ubuntu
 
@@ -465,9 +465,9 @@ $ sudo chown -R git:git learngit.git
 $ git clone git@server:/srv/sample.git
 ```
 
+# 参考
 
-
-
+[廖雪峰 Git 教程](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137628548491051ccfaef0ccb470894c858999603fedf000)
 
 
 
