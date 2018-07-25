@@ -342,6 +342,10 @@ LOGGING = {
 
 [Django Debug Toolbar](http://django-debug-toolbar.readthedocs.io/en/stable/installation.html)
 
+
+
+
+
 ### 数据库操作
 
 
@@ -437,7 +441,124 @@ Student.objects.filter(id=1).update(name='wangbaba')
 Student.objects.filter(id=1).delete()
 ```
 
+### 在 model 增加 Manager 方法 -----进阶
 
+* 增加 Manager 方法来给模块添加表级功能
+
+在我们实际开发中，代码经常会出现重复编写。在 Django 的数据库存取过程中多次出现重复的查询语句，出现代码冗余是一种不好的现象。 我们可以通过在 model 中添加 Manager 方法来减少重复代码
+
+```python
+# models.py
+# 为 Book 模型定义一个 title_count()方法
+# 实现对数据的统计
+
+from django.db import models
+
+class BookManager(models.Manager):
+    def title_count(self, keyword):
+        return self.filter(title__icontains=keyword).count()
+    
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    authors = models.ManyToManyField(Author)
+    publisher = models.ForeignKey(Publisher)
+    publication_date = models.DateField()
+	num_pages = models.IntegerField(blank=True,
+                                   null=True)
+    objects = BookManager()
+	
+    def __str__(self):
+        return self.title
+    
+# 使用
+>>> Book.objects.title_count('django')
+// 32
+
+```
+
+在上面的代码中定义了 `BookManager` 类，继承 `django.db.model.manager `  ，类中定义了一个方法，实现了对数据的统计；而在 `Book` 模型中添加了一个 objects 属性在是 `BookManager（） `  的实例，如果我们没有创建 `objects`  它也将被自动创建。这样我们就对查询进行了封装，减少重复编码。
+
+在上面的例子中，`BookManager（） `  返回的具体数值，通过 `Manager.get_query_set()` 方法实现 `BookManager()` 返回是一个 QuerySet 对象
+
+```python
+# models.py
+# 
+
+class DahlBookManager(models.Manager):
+    def get_query_set(self):
+        return super(DahlBookManager,
+                     self).get_query_set().filter(
+        author = 'Roald Dahl')
+    
+class Book(models.Model):
+    # ...
+    
+    objects = models.Manager()
+    dahl_objects = DahlBookManager()
+    
+# 使用
+Book.dahl_objects.all()
+Book.dahl_objects.filter(title='d')
+```
+
+注意：
+
+* 在 Book 模型中，多了一个 Manager 实例 objects ，这样可以避免 dahl_objects 覆盖原生的 objects，导致 Query Set 对象只有 dahl_objects 可用
+* get_query_set() 返回的是一个 QuerySet 对象，所以可以使用一切 QuerySet 方法。
+
+
+
+### 模型方法
+
+在模型中除了数据表字段外，还可以给模型定义自定义方法，实现在模型中集中业务逻辑
+
+```python
+from django.contrib.localflavor.us.models import USStateField
+from django.db import models
+
+class Person(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    birth_date = models.DateField()
+    address = models.CharField(max_length=100)
+    city = models.CharField(max_length=50)
+    state = USStateField() # Yes, this is U.S.-centric...
+
+    def baby_boomer_status(self):
+        "Returns the person's baby-boomer status."
+        import datetime
+        if datetime.date(1945, 8, 1) <= self.birth_date <= datetime.date(1964, 12, 31):
+            return "Baby boomer"
+        if self.birth_date < datetime.date(1945, 8, 1):
+            return "Pre-boomer"
+        return "Post-boomer"
+
+    def is_midwestern(self):
+        "Returns True if this person is from the Midwest."
+        return self.state in ('IL', 'WI', 'MI', 'IN', 'OH', 'IA', 'MO')
+
+    def _get_full_name(self):
+        "Returns the person's full name."
+        return u'%s %s' % (self.first_name, self.last_name)
+    full_name = property(_get_full_name)
+```
+
+
+
+
+
+
+
+
+
+### 注意
+
+* Django1.0 和 Django2.0
+
+```python
+# 外键参数
+fk = models.ForeignKey(ClassName, on_delete=models.CASCADE)
+```
 
 
 
