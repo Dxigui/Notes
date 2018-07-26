@@ -676,6 +676,28 @@ def index(request):
 pip install pymysql
 ```
 
-在下载完后还需要修改 djagno/db/mysql/base.py 文件，在     from django.utils.safestring import SafeBytest,SafeTest 下面加上  import pymysql
+在下载完后还需要修改 djagno/db/mysql/base.py 文件，在     from django.utils.safestring import SafeBytest,SafeTest 下面加上  
 
+```python
+import pymysql
 pymysql.install_as_MySQLdb()
+```
+
+### 将图片以路径形式存储在数据库中
+
+```python
+# models.py
+
+import os
+
+def get_image_path(instance, filename):
+    return os.path.join('photos', str(instance.is),
+                       filename)
+
+class ImagePath(models.Model):
+    # ...
+    image_path = ImageField(upload_to=get_image_path,
+                           blank=True,
+                           null=True)
+```
+
