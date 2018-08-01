@@ -662,6 +662,158 @@ def index(request):
         return redirect('/login/')
 ```
 
+## 利用 Django 中 Paginator 分页
+
+Django 内置的 Paginator 类能实现数据的分页，首先通过 Shell 来了解 Paginator 类
+
+```python
+# 在终端执行 python manage.py shell 进入 shell
+# 导入 models 和 Paginator
+# 这里导入一个 blog 的 article 做示例
+>>> from django.core.paginator import Paginator
+>>> from bolg.models import Article
+
+# 获得一个所有文章的 QuerySet 对象
+# 创建一个示例对象
+# 在 Paginator 中传入的第一个参数要是 list/tuple/
+# QuerySet 或者任何能调用 count（）和 __len__() 方法
+# 第二个参数是每页的文章数
+>>> articles = Article.objects.all()
+>>> page = Paginator(articles, 2)
+
+# 获取某页码中的数据
+>>> page1 = page.page(1)
+
+# page 对象的方法
+# 如果有下一页则返回 True，否则返回 False
+>>> page.has_next()
+# 如果有上一页则返回 True，否则返回 False
+>>> page.has_previous()
+# 如果有上一页或者有下一页返回 True，否则返回 False
+>>> page.has_other_pages()
+# 返回下一页的页码
+>>> pae.next_page_number()
+# 返回上一页的页码
+>>> page.previous_page_number()
+# 返回当前页的开始文章的索引，注意基础索引从 1 开始
+>>> page.start_index()
+# 返回当前页的结束文章的索引
+>>> page.end_index()
+
+# page 对象的属性
+# 返回所有的文章数，上面提到了传入 Paginator 要能
+# 调用 count() 和 len()
+# page.count 会先调用 count() 如果没有再调用 len()
+>>> page.count
+# 返回每页的文章数
+>>> page.num_pages
+# 返回一个 <class 'range_iterator'> 类型的 range()
+# 它是从 range() 中遍历出所有的页码，从 1 开始
+>>> page.page_range
+
+# 错误类型
+exception InvalidPage
+exception PageNotAnInteger
+exception EmptyPage
+
+```
+
+在视图中使用 Paginator
+
+```python
+from django.core.paginator import Paginator,
+								EmptyPage,
+    							PageNotAnInteger
+from django.shortcuts import render
+from django.views.generic import ListViews
+# 函数视图
+def listing(request):
+    # 获取所有文章的 QuerySet 对象
+    article_list = Contacts.objects.all()
+    # 创建一个 Paginator 对象，并定义每页十个数据
+    paginator = Paginator(article_list, 10)
+    # 从 request 中获取页码
+    page = request.Get.get('page')
+    try:
+        # 获取请求页码中的文章
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        # 如果 page 不是一个整形则直接过去第一页文章
+        articles = paginator.page(1)
+    excepte EmptyPage:
+        # 如果请求的页码超出范围则直接获取最后一页
+        articles = paginator.page(paginator.num_pages)
+    return render(request, 'list.html', {'articles': articles})
+
+# 类视图
+# ListViews 通用视图中封装了分页 只要给 paginatoe_by 指定每页文章数
+class ArticleIndex(ListViews):
+    # 指定模型
+    model = Article
+    # 指定模板
+    template = 'blog/list.html'
+    # 上下文名字
+    context_object_name = 'articles_list'
+    # 指定每页文章数
+    paginate_by = 5
+```
+
+写完视图后写模板
+
+```django
+{% for article in articles %}
+	{{ article.full_name|upper }}<br />
+{% endfor %}
+
+# 函数视图渲染的模板
+<div class="paginator">
+    <span class="step-links">
+    	{% if articles.has_previous %}
+        <a href="?page={{ articles.previous_page_number}}">
+        	previous
+        </a>
+        {% endif%}
+        
+        <span class="current">
+            Page {{ articles.number }} of
+            {{ articles.paginator.num_pages }}
+        </span>
+        
+        {% if articles.has_next %}
+        <a href="?page={{ articles.next_page_number }}"></a>
+        {% endif %}
+    </span>
+</div>
+
+
+# 类视图渲染的模板
+# paginator 为 Paginator 的实例
+# page_obj 为当前页面的分页对象
+# is_paginated 判断是否分页，且只有当分页后页面超过两页时才算分页
+# object_list 请求页面的对象列表 等同于 articles_list 
+# 在模板中 object_list 和 articles_list 都可以使用
+{% if is_paginated %}
+	<div class="pagination-simple">
+		{% if page_obj.has_previous %}
+		<a href="?page={{ page_obj.previous_page_number }}">
+			上一页
+		</a>
+		{% endif %}
+		<span class="current">
+		第 {{ page_obj.number }} 页 / 共 
+            {{ paginator.num_pages }} 页
+		</span>
+		{% if page_obj.has_next %}
+		<a href="?page={{ page_obj.next_page_number }}">
+		下一页
+		</a>
+		{% endif %}
+	</div>
+{% endif %}
+```
+
+
+
 
 
 ## 遇到的问题
@@ -701,3 +853,6 @@ class ImagePath(models.Model):
                            null=True)
 ```
 
+### 无法根据数据库记录创建时间的月份取出数据
+
+在 Django 项目设置里把时区改为 `TIME_ZONE=Aisa/Shanghai`时，需要将 `USE_TZ` 改为 `False`  ，不然在需要根据数据库记录创建时间的月份为查询条件时，会无法识别年份以后的时间段，查询返回时空。
