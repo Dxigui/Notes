@@ -587,7 +587,7 @@ admin.site.register(models.Objectname)
 class BookAdmin(admin.ModelAdmin):
     # 让每个数据显示更多的信息，如 name、id、price、pub_date 等，id 为第一权限，name 为第二权限
     list_display = ('id', 'name', 'price', 'pub_date')
-    # 设置可以尽心编辑的内容
+    # 设置可以进行编辑的内容
     list_editable = ('name', 'price')
     # 在多对多时，实现其搜索，后面的参数必须是多对多模式
     # filter_horizontal = ('author',)
@@ -738,7 +738,7 @@ def listing(request):
         # 获取请求页码中的文章
         articles = paginator.page(page)
     except PageNotAnInteger:
-        # 如果 page 不是一个整形则直接过去第一页文章
+        # 如果 page 不是一个整形则直接跳去第一页
         articles = paginator.page(1)
     excepte EmptyPage:
         # 如果请求的页码超出范围则直接获取最后一页
@@ -751,7 +751,7 @@ class ArticleIndex(ListViews):
     # 指定模型
     model = Article
     # 指定模板
-    template = 'blog/list.html'
+    template_name = 'blog/list.html'
     # 上下文名字
     context_object_name = 'articles_list'
     # 指定每页文章数
@@ -828,7 +828,7 @@ class ArticleIndex(ListViews):
 pip install pymysql
 ```
 
-在下载完后还需要修改 djagno/db/mysql/base.py 文件，在     from django.utils.safestring import SafeBytest,SafeTest 下面加上  
+在下载完后还需要修改 django/db/mysql/base.py 文件，在     `from django.utils.safestring import SafeBytest,SafeTest` 下面加上  
 
 ```python
 import pymysql
