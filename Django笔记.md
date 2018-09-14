@@ -360,7 +360,7 @@ LOGGING = {
 stu = Student.objects.all()
 # 查询指定的字段 如 id name
 # 返回的也是一个 QuerySet 对象
-# 不过里面时一个包含字典的 list
+# 不过里面是一个包含字典的 list
 # <QerySet [{'id': 1, 'name': 'a'}, {'id': 2, 'name': 'b'}]>
 stu = Student.objects.all().values('id', 'name')
 # 和上面的查询是一样的，返回的值的数据类型不一样

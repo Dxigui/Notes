@@ -258,6 +258,32 @@ $ git push -u origin master
 $ git clone git@github.com:name/repository name.git
 ```
 
+### 设置忽略文件
+
+在向远程仓库提交文件时,我们往往不会向远程仓库提交一些无用的的文件以及一些很私密的文件,例如:数据库配置信息.这时我们就需要过滤掉一些文件,让 Git 忽略这些文件,以保证信息的保密和远程仓库的干净.
+
+在 Git 项目文件目录下添加 `.gitignore`  文件,在此文件中设置需要忽略的文件配置.Github 官方提供了已经写好的各种语言的 `gitignore` 文件,同时也可以在此文件追加, [GitHub官网](https://github.com/github/gitignore).
+
+**注意**
+
+```python
+# 配置文件中的符号意义
+
+*.txt    # 忽略所有以 .txt 结尾文件
+test/    # 忽略 test 文件夹
+!test/__init__.py    # 保留 test 文件夹下的 __init__.py 文件
+.env    # 忽略该文件
+
+
+# 在没有配置 .gitignore 文件并提交到远程仓库情况下
+# 可以先将本地缓存删除
+$ git rm -r --cached .
+# 然后设置 .gitignore
+# 重新提交
+```
+
+
+
 ## 分支管理
 
 ### 分支管理原则
