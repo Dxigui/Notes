@@ -220,6 +220,128 @@ Django 使用模板系统来实现 Python 代码和页面设计的分离，Djang
 
 模板系统能处理多种数据结构，如 list dictionary 自定义对象（类）
 
+### 各种模板标签
+
+Django 文档中 [内置模板标签](https://docs.djangoproject.com/en/1.11/ref/templates/builtins/#built-in-tag-reference) 
+
+* `regroup`
+
+`regroup` 通过共同属性对相似对象的列表进行重新分组 
+
+例如:一个带有 `name`,`population`,'county`, 属性的城市列表
+
+```python
+cities = [
+    {'name': 'Mumbai', 'population': '19,000,000', 'country': 'India'},
+    {'name': 'Calcutta', 'population': '15,000,000', 'country': 'India'},
+    {'name': 'New York', 'population': '20,000,000', 'country': 'USA'},
+    {'name': 'Chicago', 'population': '7,000,000', 'country': 'USA'},
+    {'name': 'Tokyo', 'population': '33,000,000', 'country': 'Japan'},
+]
+```
+
+现在想要根据国家列出每个国家的所属的城市
+
+例如:
+
+* india
+  * Mumbai: 19,000,000
+  * Calcutta:15,000,000
+* USA
+  * New York:20,000,000
+  * Chicago:7,000,000
+* Japan
+  * Tokyo:33,000,000
+
+通过 {% regroup %} 标签实现分类
+
+```jinja2
+{% regroup cities by country as country_list %}
+
+<ul>
+{% for country in country_list %}
+    <li>{{ country.grouper}}
+    <ul>
+        {% for city in country.list %}
+          <li>{{ city.name }}: {{ city.population}}</li>
+        {% endfor %}
+    </ul>
+    </li>
+{% endfor %}
+</ul>
+```
+
+在上面的示例中,`{% regroup %}` 有三个参数
+
+1. 需要分组的列表: 示例中的 `cities`
+2. 分组属性: 示例中的 `country`
+3. 返回的列表名: 示例中的 `country_list`
+
+`{% regroup %}` 返回的列表是一个 `group objects` ,是 `namedtuple()` 的一个实例,包含两个属性:
+
+* `grouper`: 分组属性名 (示例中的 `India` or `Japan`  or `USA`)
+
+* `list` : 分组中的所有项目( 示例中所有属于 `India` 的城市)
+
+  **注意** 在 Django 1.11 中才将 `group object` 从字典改为 `namedtuple()` 实例
+
+如果 `{% regroup %}` 生成的是一个 ``namedtuple()` 对象,那么上面的例子也可以写成下面这样:
+
+``` jinja2
+{% regroup cities by country as country_list %}
+
+<ul>
+{% for country, local_cities in country_list %}
+    <li>{{ coutnry }}
+    <ul>
+        {% for city in local_cities %}
+        <li>{{ ciry.name }}:{{ city.population }}</li>
+        {% endfor %}
+    <ul>
+    </li>
+{% endfor %}
+</ul>
+```
+
+**注意**
+
+`{% regroup %}` 是不对需要分组的对象进行排序的,所以在进行分组前需要对分组属性先排序在分组.如果对下面的 `cities` 分组
+
+```python
+# cities 中的 country 没有顺序
+cities = [
+    {'name': 'Mumbai', 'population': '19,000,000', 'country': 'India'},
+    {'name': 'New York', 'population': '20,000,000', 'country': 'USA'},
+    {'name': 'Calcutta', 'population': '15,000,000', 'country': 'India'},
+    {'name': 'Chicago', 'population': '7,000,000', 'country': 'USA'},
+    {'name': 'Tokyo', 'population': '33,000,000', 'country': 'Japan'},
+]
+```
+
+用 `{% regroup %}` 分组
+
+* India
+  * Mumbai: 19,000,000
+* USA
+  * New York: 20,000,000
+* India
+  * Calcutta: 15,000,000
+* USA
+  * Chicago: 7,000,000
+* Japan
+  * Tokyo: 33,000,000
+
+排序方法:
+
+* 先在视图函数中进行排序
+
+* 使用 `dictsort` 筛选器
+
+  ```jinja2
+  {% regroup cities|dictsort:"country" by country as country_list %}
+  ```
+
+
 ### 传递字典
 
 ```python
@@ -811,6 +933,10 @@ class ArticleIndex(ListViews):
 	</div>
 {% endif %}
 ```
+
+## RSS 订阅
+
+Django 内置了 RSS 订阅类([官方文档](https://docs.djangoproject.com/en/1.11/ref/contrib/gis/feeds/))
 
 
 
