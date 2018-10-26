@@ -209,6 +209,3 @@ if __name__ == '__main__':
 
 ```
 
-运行结果:
-
-![](C:\Users\Administrator\Desktop\UDP通信.png)
