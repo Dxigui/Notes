@@ -117,5 +117,186 @@ array([0.  , 0.25, 0.5 , 0.75, 1.  , 1.25, 1.5 , 1.75, 2.  ])
 
 4. See also
 
-`array, zeros, zeros_like, ones_like, empty, empty_like, arange, linspace, numpy.random.rand, numpy.random.random, fromfunction, fromfile, numpy.random.shuffle`
+> `array, zeros, zeros_like, ones_like, empty, empty_like, arange, linspace, numpy.random.rand, numpy.random.random, fromfunction, fromfile, numpy.random.shuffle`
+
+
+
+### 基础运算
+
+1. 
+
+* 相同大小的多维数组可以相加减
+* 行列相等的多维数组可以相乘除
+
+2. 矩阵积
+
+```python
+>>> A @ B              # matrix product
+array([[5, 4],
+       [3, 4]])
+>>> A.dot(B)           # another matrix product
+array([[5, 4],
+       [3, 4]])
+```
+
+3. 聚合
+
+可以设定 `axis` 参数对指定轴进行操作(`axis=1` (行) or `axis=0` (列))
+
+```python
+>>> b = np.arange(12).reshape(3,4)
+>>> b
+array([[ 0,  1,  2,  3],
+       [ 4,  5,  6,  7],
+       [ 8,  9, 10, 11]])
+>>> b.sum(axis=0)               # 对每一列求和
+array([12, 15, 18, 21])
+>>>
+>>> b.min(axis=1)               # 对每一行求最小值
+array([0, 4, 8])
+>>>
+>>> b.cumsum(axis=1)            # 
+array([[ 0,  1,  3,  6],
+       [ 4,  9, 15, 22],
+       [ 8, 17, 27, 38]])
+```
+
+### 通用函数
+
+>`all, add, any, apply_along_aixs, argmax, argmin, argsort, average(取平均值), bincount, ceil(向上取整), clip, conj, corrcoef, cov, cross, cumprod, cumsum, diff, dot(矩阵积), floor(向下取整), fromfunction(通过函数生成数组), lnner, inv, lexsort, max(取最大值), maximum, mean, median, min(取最小值), minimum, nonzero, outer, prod, re, round, sort(排序), std, sum(求和), sqrt(平方根), trace, tanspose, var, vdot, vectorize, where`
+
+### 切片,索引,迭代
+
+1. 一维数组
+
+一维数组的切片和 `Python` 一样
+
+```python
+>>> arr = np.arange(10)**3
+>>> arr
+array([  0,   1,   8,  27,  64, 125, 216, 343, 512, 729])
+>>> # 替换元素
+>>> arr[:6:2] = -1000
+>>> arr
+array([-1000,     1, -1000,    27, -1000,   125,   216,   343,   512,   729])
+```
+
+2. 多维数组
+
+每个轴可以有一个索引,当提供比轴数更少的索引时,缺失的索引被认为是一个完整的切片
+
+```python
+>>> def f(x,y):
+...     return 10*x+y
+...
+>>> b = np.fromfunction(f,(5,4),dtype=int)
+>>> b
+array([[ 0,  1,  2,  3],
+       [10, 11, 12, 13],
+       [20, 21, 22, 23],
+       [30, 31, 32, 33],
+       [40, 41, 42, 43]])
+>>> b[2,3]
+23
+>>> b[0:5, 1]               # each row in the second column of b
+array([ 1, 11, 21, 31, 41])
+>>> b[ : ,1]                # equivalent to the previous example
+array([ 1, 11, 21, 31, 41])
+>>> b[1:3, : ]              # each column in the second and third row of b
+array([[10, 11, 12, 13],
+       [20, 21, 22, 23]])
+>>> b[-1]                  # 负索引
+array([40, 41, 42, 43])
+```
+
+`NumPy` 也可以使用三个点 `...` 表示完整索引,和 `:` 一样.
+
+- `x[1,...]` 等于 `x[1,:]`。
+- `x[...,3]` 等效于 `x[:,3]`。
+
+```python
+>>> b[...,1]
+array([ 1, 11, 21, 31, 41])
+```
+
+3. see also
+
+> `indexing,  newaxis, ndenumerate, indices`
+
+4. 迭代
+
+多维数组以轴迭代
+
+```python
+>>> for row in b:
+        print(row)
+[0 1 2 3]
+[10 11 12 13]
+[20 21 22 23]
+[30 31 32 33]
+[40 41 42 43]
+```
+
+迭代每一个元素
+
+```python
+>>> for element in b.flat:
+        print(element)
+0
+1
+2
+3
+10
+11
+12
+13
+20
+21
+22
+23
+30
+31
+32
+33
+40
+41
+42
+43
+```
+
+## Shape Manipulation
+
+1. 更改数组形状
+
+```python
+>>> a = np.floor(10*np.random.random((3,4)))
+>>> a
+array([[ 2.,  8.,  0.,  6.],
+       [ 4.,  5.,  1.,  1.],
+       [ 8.,  9.,  3.,  6.]])
+>>> a.shape
+(3, 4)
+>>> # 将多维数组变为一维数组
+>>> a.ravel()
+array([ 2.,  8.,  0.,  6.,  4.,  5.,  1.,  1.,  8.,  9.,  3.,  6.])
+>>> # returns the array with a modified shape
+>>> a.reshape()
+array([[ 2.,  8.],
+       [ 0.,  6.],
+       [ 4.,  5.],
+       [ 1.,  1.],
+       [ 8.,  9.],
+       [ 3.,  6.]])
+>>> # 翻转数组, 行==>列 列==>行
+>>> a.T
+array([[ 2.,  4.,  8.],
+       [ 8.,  5.,  9.],
+       [ 0.,  1.,  3.],
+       [ 6.,  1.,  6.]])
+>>> # resize 修改数组本身
+>>> a.resize((2,6))
+>>> a
+array([[ 2.,  8.,  0.,  6.,  4.,  5.],
+       [ 1.,  1.,  8.,  9.,  3.,  6.]])
+```
 
