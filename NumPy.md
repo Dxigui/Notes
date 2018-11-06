@@ -136,18 +136,19 @@ array([0.  , 0.25, 0.5 , 0.75, 1.  , 1.25, 1.5 , 1.75, 2.  ])
 * 相同大小的多维数组可以相加减
 * 行列相等的多维数组可以相乘除
 
-2. 矩阵积
+2. 矩阵积(线性代数)
 
 ```python
 >>> A @ B              # matrix product
 array([[5, 4],
        [3, 4]])
+>>> # np.dot(A, B)
 >>> A.dot(B)           # another matrix product
 array([[5, 4],
        [3, 4]])
 ```
 
-3. 聚合
+3. 数学和统计
 
 可以设定 `axis` 参数对指定轴进行操作(`axis=1` (行) or `axis=0` (列))
 
@@ -159,6 +160,7 @@ array([[ 0,  1,  2,  3],
        [ 8,  9, 10, 11]])
 >>> b.sum(axis=0)               # 对每一列求和
 array([12, 15, 18, 21])
+>>> (b > 6).sum()               # 判断大于 6 的个数
 >>>
 >>> b.min(axis=1)               # 对每一行求最小值
 array([0, 4, 8])
@@ -167,14 +169,42 @@ array([0, 4, 8])
 array([[ 0,  1,  3,  6],
        [ 4,  9, 15, 22],
        [ 8, 17, 27, 38]])
->>> # 平均数 np.mean()
+>>> # 平均数 arr.mean()
+>>> b.mean(axis=1)
 >>> # 方差 np.var()
 >>> # 标准差 np.std() / np.sqrt(np.var())
 ```
 
+4. 排序
+
+* `np.sort`  
+* `arr.sort`
+
+5. 集合
+
+`np.unique` 对数组去重且排序
+
+```python
+>>> ints = np.array([[3, 3, 3, 2, 2, 1, 1, 4, 4]])
+>>> np.unique(ints)
+array([1, 2, 3, 4])
+```
+
+`np.in1d` 判断一个数组元素是否在另一个数组中出现.返回一个布尔类型的数组
+
+```python
+>>> values = np.array([6, 0, 0, 3, 2, 5, 6])
+>>> np.in1d(values, [2, 3, 6])
+array([ True, False, False,  True,  True, False,  True], dtype=bool)
+```
+
+其他集合运算
+
+![](/home/dxigui/git_repositories/notes/Notes/img/7178691-80e85ae6b9c89ada.png)
+
 ### 通用函数
 
->`all, add, any, apply_along_aixs, argmax, argmin, argsort, average(取平均值), bincount, ceil(向上取整), clip, conj, corrcoef, cov, cross, cumprod, cumsum, diff, dot(矩阵积), floor(向下取整), fromfunction(通过函数生成数组), lnner, inv, lexsort, max(取最大值), maximum(计算两个数组的最大值), mean, median, min(取最小值),modf(将小数和整数分开), minimum, nonzero, outer, prod, re, round, sort(排序), std, sum(求和), sqrt(平方根), trace, tanspose, var, vdot, vectorize, where`
+>`all, add, any, apply_along_aixs, argmax(最大值索引), argmin(最小值索引), argsort, average(取平均值), bincount, ceil(向上取整), clip, conj, corrcoef, cov, cross, cumprod(累乘), cumsum(累加), diff, dot(矩阵积), floor(向下取整), fromfunction(通过函数生成数组), lnner, inv, lexsort, max(取最大值), maximum(计算两个数组的最大值), mean, median, min(取最小值),modf(将小数和整数分开), minimum, nonzero, outer, prod, re, round(取浮点数整数位), sort(排序), std, sum(求和), sqrt(平方根), trace, tanspose, var, vdot, vectorize, where`
 
 ![](/home/dxigui/git_repositories/notes/Notes/img/numpy_buildin.png)
 
@@ -536,4 +566,76 @@ array([[[ 0,  1,  2],
        [[ 3,  4,  5],
         [ 9, 10, 11]]])
 ```
+
+## 文件输入输出
+
+  `NnmPy` 可以读取磁盘上的文本数据或二进制数据.
+
+* `np.load` : 加载
+* `np.save` : 保存
+
+## 线性代数
+
+1. 矩阵积 `np.dot(x, y)/ @`
+2. `numpy.linalg` 有一组标准的矩阵分解以及求逆和行列式等,跟 `MATLAB` 和 `R` 使用相同的标准线性代数库
+
+```python
+>>> from numpy.linalg import inv, qr
+>>> x = np.random.randn(5, 5)
+>>> mat = x.T.dot(x)
+>>> inv(mat)
+array([[ 2.4752157 , -0.66001833,  0.03687132, -0.24032098,  0.91882267],
+       [-0.66001833,  0.5312406 , -0.05302478, -0.07372292, -0.48884175],
+       [ 0.03687132, -0.05302478,  0.16210889, -0.02151428, -0.0311337 ],
+       [-0.24032098, -0.07372292, -0.02151428,  0.25090395,  0.06021454],
+       [ 0.91882267, -0.48884175, -0.0311337 ,  0.06021454,  0.62661767]])
+>>>
+>>> mat.dot(inv(mat))
+array([[ 1.00000000e+00, -3.51825165e-16, -3.10586036e-18,
+        -4.88246818e-17, -2.12839159e-16],
+       [-5.71526377e-16,  1.00000000e+00, -2.98962979e-17,
+         1.31699732e-16,  9.67382991e-17],
+       [ 4.86227468e-17, -9.30314439e-18,  1.00000000e+00,
+         4.90539803e-17,  4.42287963e-16],
+       [-4.79550393e-16, -7.30180902e-16, -1.14491667e-17,
+         1.00000000e+00,  8.67834998e-18],
+       [-4.97817442e-16,  3.02462682e-16, -1.47350333e-17,
+         3.26333630e-17,  1.00000000e+00]])
+>>> 
+>>> q, r = qr(mat)
+>>> print(r)
+[[ -4.11803017   9.41551308   7.5674221   -6.13120307  15.53898699]
+ [  0.         -10.38470796  -7.23578288  -3.53713249  -8.39149824]
+ [  0.           0.          -5.79833062  -0.62105039   0.07789348]
+ [  0.           0.           0.          -2.90383595  -0.25746937]
+ [  0.           0.           0.           0.           0.82187106]]
+```
+
+![](/home/dxigui/git_repositories/notes/Notes/img/线性代数.png)
+
+## 随机数生成
+
+`numpy.random` 模块生成随机数
+
+```python
+>>> # normal 正态分布的随机数
+>>> samples = np.random.normal(size=(4, 4))
+>>> samples
+array([[-9.07458099e-01,  5.94639153e-01,  2.23399572e-04,
+         1.30733903e+00],
+       [-2.91614464e-01, -2.14879117e-01, -6.62887267e-01,
+         1.62780067e+00],
+       [-2.64349861e-01,  1.83446976e+00, -1.46964279e+00,
+         4.61640450e-01],
+       [ 6.65243945e-01,  1.47635759e+00,  5.80469276e-01,
+        -1.24388248e+00]])
+```
+
+这些生成的随机数是伪随机数,是通过算法给予随机数生成器种子,在确定的条件下生成的.可以通过 `numpy.random.seed` 修改随机数生成种子.`numpy.random` 使用的是全局随机种子,可以通过 `numpy.RandomState` 创建一个隔离(私有)的随机数生成器.
+
+其他 `random` 中的函数
+
+![](/home/dxigui/git_repositories/notes/Notes/img/random1.png)
+
+![](/home/dxigui/git_repositories/notes/Notes/img/random2.png)
 
