@@ -174,7 +174,11 @@ array([[ 0,  1,  3,  6],
 
 ### 通用函数
 
->`all, add, any, apply_along_aixs, argmax, argmin, argsort, average(取平均值), bincount, ceil(向上取整), clip, conj, corrcoef, cov, cross, cumprod, cumsum, diff, dot(矩阵积), floor(向下取整), fromfunction(通过函数生成数组), lnner, inv, lexsort, max(取最大值), maximum, mean, median, min(取最小值), minimum, nonzero, outer, prod, re, round, sort(排序), std, sum(求和), sqrt(平方根), trace, tanspose, var, vdot, vectorize, where`
+>`all, add, any, apply_along_aixs, argmax, argmin, argsort, average(取平均值), bincount, ceil(向上取整), clip, conj, corrcoef, cov, cross, cumprod, cumsum, diff, dot(矩阵积), floor(向下取整), fromfunction(通过函数生成数组), lnner, inv, lexsort, max(取最大值), maximum(计算两个数组的最大值), mean, median, min(取最小值),modf(将小数和整数分开), minimum, nonzero, outer, prod, re, round, sort(排序), std, sum(求和), sqrt(平方根), trace, tanspose, var, vdot, vectorize, where`
+
+![](/home/dxigui/git_repositories/notes/Notes/img/numpy_buildin.png)
+
+![](/home/dxigui/git_repositories/notes/Notes/img/numpy_buildin2.png)
 
 ### 切片,索引,迭代
 
