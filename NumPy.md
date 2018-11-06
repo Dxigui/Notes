@@ -206,9 +206,9 @@ array([ True, False, False,  True,  True, False,  True], dtype=bool)
 
 >`all, add, any, apply_along_aixs, argmax(最大值索引), argmin(最小值索引), argsort, average(取平均值), bincount, ceil(向上取整), clip, conj, corrcoef, cov, cross, cumprod(累乘), cumsum(累加), diff, dot(矩阵积), floor(向下取整), fromfunction(通过函数生成数组), lnner, inv, lexsort, max(取最大值), maximum(计算两个数组的最大值), mean, median, min(取最小值),modf(将小数和整数分开), minimum, nonzero, outer, prod, re, round(取浮点数整数位), sort(排序), std, sum(求和), sqrt(平方根), trace, tanspose, var, vdot, vectorize, where`
 
-![](/home/dxigui/git_repositories/notes/Notes/img/numpy_buildin.png)
+![](https://github.com/Dxigui/Notes/blob/master/img/numpy_buildin.png)
 
-![](/home/dxigui/git_repositories/notes/Notes/img/numpy_buildin2.png)
+![](https://github.com/Dxigui/Notes/blob/master/img/numpy_buildin2.png)
 
 ### 切片,索引,迭代
 
@@ -611,7 +611,7 @@ array([[ 1.00000000e+00, -3.51825165e-16, -3.10586036e-18,
  [  0.           0.           0.           0.           0.82187106]]
 ```
 
-![](/home/dxigui/git_repositories/notes/Notes/img/线性代数.png)
+![](https://github.com/Dxigui/Notes/blob/master/img/线性代数.png)
 
 ## 随机数生成
 
@@ -635,7 +635,7 @@ array([[-9.07458099e-01,  5.94639153e-01,  2.23399572e-04,
 
 其他 `random` 中的函数
 
-![](/home/dxigui/git_repositories/notes/Notes/img/random1.png)
+![](https://github.com/Dxigui/Notes/blob/master/img/random1.png)
 
-![](/home/dxigui/git_repositories/notes/Notes/img/random2.png)
+![](https://github.com/Dxigui/Notes/blob/master/img/random2.png)
 
