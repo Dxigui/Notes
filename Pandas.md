@@ -142,6 +142,8 @@ If you want to only read a small
 4  0.354628 -0.133116  0.283763 -0.837063   Q
 >>> # chunksize 迭代取出
 >>> ch = pd.read_csv('examples/ex6.csv', chunksize=1000)
+>>> # usecols 指定读取列
+>>> pd.read_csv('examples/ex6.csv')
 ```
 
 ### 将数据写到文本
@@ -342,7 +344,232 @@ pandas有一个read_sql函数，可以让你轻松的从SQLAlchemy连接读取�
 
 
 
-## 数据清洗和准备
+## 数据准备和清洗
 
-## 处理缺失数据
+### 处理缺失数据
+
+一些缺失值处理函数
+
+![](/home/dxigui/git_repositories/notes/Notes/img/pd_missing_value_func.png)
+
+1. `Series` 对象
+
+```python
+>>> string_data = pd.Series(['aardvark', 'artichoke', np.nan, 'avocado'])
+>>> string_data
+0     aardvark
+1    artichoke
+2          NaN
+3      avocado
+dtype: object
+>>> # 是否存在缺失值 返回一个同大小的布尔类型
+>>> string_data.isnull()
+0    False
+1    False
+2     True
+3    False
+dtype: bool
+>>> # 删除去除缺失值的行后的新 Series
+>>> string_data.dropna()
+0     aardvark
+1    artichoke
+3      avocado
+dtype: object
+>>> # 通过 method/value 填充 NA/NAN 的值 
+>>> string_data.fillna(value='Jon')
+0     aardvark
+1    artichoke
+2          Jon
+3      avocado
+dtype: object
+```
+
+2. 过滤 `DataFrame` 对象
+
+```python
+>>> data = pd.DataFrame([[1., 6.5, 3.], [1., NA, NA],
+                    [NA, NA, NA], [NA, 6.5, 3.]])
+>>> # 过滤所有含 NAN 的行
+>>> cleaned = data.dropna()
+>>> data
+     0    1    2
+0  1.0  6.5  3.0
+1  1.0  NaN  NaN
+2  NaN  NaN  NaN
+3  NaN  6.5  3.0
+>>> cleaned
+     0    1    2
+0  1.0  6.5  3.0
+>>> # 传入 how='all' 过滤整行全为 NAN 的行
+>>> data.dropna(how='all')
+     0    1    2
+0  1.0  6.5  3.0
+1  1.0  NaN  NaN
+3  NaN  6.5  3.0
+```
+
+`fillna` 函数参数
+
+* `value` 用于填充缺失值的标量值或字典对象
+* `method` 插值方式 ,默认 `ffill`
+* `axis` 填充的轴
+* `inplace` 设置是否产生副本
+* `limit` 可以连续填充的最大数量
+
+### 移除重复数据
+
+1. `data.duplicated` 
+
+`DataFrame` 的 `duplicated` 方法返回一个布尔型 `Series`，表示各行是否是重复行（前面出现过的行）
+
+````python
+>>> data = pd.DataFrame({'k1': ['one', 'two'] * 3 + ['two'],
+                         'k2': [1, 1, 2, 3, 3, 4, 4]})
+>>> data
+    k1  k2
+0  one   1
+1  two   1
+2  one   2
+3  two   3
+4  one   3
+5  two   4
+6  two   4
+>>> data.duplicated()
+0    False
+1    False
+2    False
+3    False
+4    False
+5    False
+6     True
+dtype: bool
+````
+
+2. `data.duplicates()`
+
+```python
+>>> # 根据参数 keep 选择删除那些行
+>>> data.duplicates(['k1', 'k2'], keep='last')
+    k1  k2  v1
+0  one   1   0
+1  two   1   1
+2  one   2   2
+3  two   3   3
+4  one   3   4
+6  two   4   6
+```
+
+### 利用函数或映射进行数据转换
+
+`Series` 的 `map` 方法可以接受一个函数或含有映射关系的字典型对象
+
+```python
+>>> data = pd.DataFrame({'food': ['bacon', 'pulled pork', 'bacon',
+                                 'Pastrami', 'corned beef', 'Bacon',
+                                 'pastrami', 'honey ham', 'nova lox'],
+                      'ounces': [4, 3, 12, 6, 7.5, 8, 3, 5, 6]})
+>>> data 
+          food  ounces
+0        bacon     4.0
+1  pulled pork     3.0
+2        bacon    12.0
+3     Pastrami     6.0
+4  corned beef     7.5
+5        Bacon     8.0
+6     pastrami     3.0
+7    honey ham     5.0
+8     nova lox     6.0
+>>> meat_to_animal = {
+  'bacon': 'pig',
+  'pulled pork': 'pig',
+  'pastrami': 'cow',
+  'corned beef': 'cow',
+  'honey ham': 'pig',
+  'nova lox': 'salmon'
+}
+>>> # 用 str.lower() 将 Series 元素转为小写
+>>> lowercased = data['food'].str.lower()
+>>> # map 映射(字典)
+>>> data['animal'] = lowercased.map(meat_to_animal)
+>>> data
+          food  ounces  animal
+0        bacon     4.0     pig
+1  pulled pork     3.0     pig
+2        bacon    12.0     pig
+3     Pastrami     6.0     cow
+4  corned beef     7.5     cow
+5        Bacon     8.0     pig
+6     pastrami     3.0     cow
+7    honey ham     5.0     pig
+8     nova lox     6.0  salmon
+>>> # map 映射(函数)
+>>> data['food'].map(lambda x: meat_to_animal[x.lower()])
+0       pig
+1       pig
+2       pig
+3       cow
+4       cow
+5       pig
+6       cow
+7       pig
+8    salmon
+Name: food, dtype: object
+```
+
+### 替换值
+
+`data.replace` 替换元素
+
+```python
+>>> data = pd.Series([1., -999., 2., -999., -1000., 3.])
+>>> data
+0       1.0
+1    -999.0
+2       2.0
+3    -999.0
+4   -1000.0
+5       3.0
+>>> # replace 中用参数 value 替换 to_replace 并返回一个新参数, value 和 to_replace 可以是列表/字典/正则/字串/Series/int/float/None
+>>> # list: data.replace([a, b], c) or replace([a, b], [c, d])
+>>> # dict: data.repalce({a:c, b:d})
+>>> data.replace(-999, np.nan)
+0       1.0
+1       NaN
+2       2.0
+3       NaN
+4   -1000.0
+5       3.0
+dtype: float64
+```
+
+### 重命名轴索引
+
+和 `Series` 中的值一样,轴标签也可以通过 `map` 进行函数或映射进行转换
+
+```python
+>>> d2 = pd.DataFrame(np.arange(12).reshape((3, 4)),
+                    index=['Ohio', 'Colorado', 'New York'],
+                     columns=['one', 'two', 'three', 'four'])
+>>> # 创建函数
+>>> transform = lambda x: x.upper()
+>>> # map 进行转换
+>>> d2.index = d2.index.map(transform)
+>>> d2
+one  two  three  four
+OHIO    0    1      2     3
+COLO    4    5      6     7
+NEW     8    9     10    11
+```
+
+`rename` 转换的同时创建新数据,不修改原数据
+
+```python
+>>> d2.rename(index=str.title, columns=str.upper)
+one  two  peekaboo  four
+INDIANA    0    1         2     3
+COLO       4    5         6     7
+NEW        8    9        10    11
+```
+
+### 离散化和面元划分
 
