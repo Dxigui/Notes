@@ -204,7 +204,7 @@ array([ True, False, False,  True,  True, False,  True], dtype=bool)
 
 ### 通用函数
 
->`all, add, any, apply_along_aixs, argmax(最大值索引), argmin(最小值索引), argsort, average(取平均值), bincount, ceil(向上取整), clip, conj, corrcoef, cov, cross, cumprod(累乘), cumsum(累加), diff, dot(矩阵积), floor(向下取整), fromfunction(通过函数生成数组), lnner, inv, lexsort, max(取最大值), maximum(计算两个数组的最大值), mean, median, min(取最小值),modf(将小数和整数分开), minimum, nonzero, outer, prod, re, round(取浮点数整数位), sort(排序), std, sum(求和), sqrt(平方根), trace, tanspose, var, vdot, vectorize, where`
+>`all, add, any, abs(绝对值), apply_along_aixs, argmax(最大值索引), argmin(最小值索引), argsort, average(取平均值), bincount, ceil(向上取整), clip, conj, corrcoef, cov, cross, cumprod(累乘), cumsum(累加), diff, dot(矩阵积), floor(向下取整), fromfunction(通过函数生成数组), lnner, inv, lexsort, max(取最大值), maximum(计算两个数组的最大值), mean, median, min(取最小值),modf(将小数和整数分开), minimum, nonzero, outer, prod, re, round(取浮点数整数位), sort(排序), std(标准差), sum(求和), sqrt(平方根), trace, tanspose, var, vdot, vectorize, where`
 
 ![](https://github.com/Dxigui/Notes/blob/master/img/numpy_buildin.png)
 
