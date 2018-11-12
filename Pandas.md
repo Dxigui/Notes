@@ -704,5 +704,164 @@ Name: 2, dtype: float64
 
 ### 层次化索引
 
-层次索引让一个轴上有多个索引级别,能以低纬度刑事处理高纬度数据.
+层次索引(hierarchical indexing)让一个轴上有多个索引级别,能以低纬度刑事处理高纬度数据.
+
+```python
+>>> data = pd.Series(np.random.randn(9),
+                     index=[['a', 'a', 'a', 'b', 'b', 'c', 'c', 'd', 'd'],
+                            [1, 2, 3, 1, 3, 1, 2, 2, 3]])
+>>> data
+a  1   -1.019705
+   2    0.737992
+   3    1.063738
+b  1    1.874544
+   3   -1.679447
+c  1   -0.614820
+   2   -0.789583
+d  2   -0.485948
+   3   -1.960032
+dtype: float64
+>>> # 用 index 属性可以查看到带有 MultiIndex 索引的 Series 格式
+>>> data.index
+MultiIndex(levels=[['a', 'b', 'c', 'd'], [1, 2, 3]],
+           labels=[[0, 0, 0, 1, 1, 2, 2, 3, 3], [0, 1, 2, 0, 2, 0, 1, 1, 2]])
+```
+
+对于层次化索引对象,可以使用部分索引,来选取数据子集
+
+```python
+>>> # 外层索引
+>>> data['b']
+1    1.874544
+3   -1.679447
+dtype: float64
+>>> data['b':'c']
+b  1    1.874544
+   3   -1.679447
+c  1   -0.614820
+   2   -0.789583
+dtype: float64
+>>> data[['b', 'd']]
+b  1    1.874544
+   3   -1.679447
+d  2   -0.485948
+   3   -1.960032
+dtype: float64
+    
+>>> # 内层索引
+>>> data.loc[:, 2]
+a    0.737992
+c   -0.789583
+d   -0.485948
+dtype: float64
+```
+
+层次化索引多用于数据重塑和基于分组的操作(透视表生成).
+
+```python
+>>> # 通过 unstack 方法重新将数据排到一个 DataFrame
+>>> data.unstatck()
+          1         2         3
+a -1.019705  0.737992  1.063738
+b  1.874544       NaN -1.679447
+c -0.614820 -0.789583       NaN
+d       NaN -0.485948 -1.960032
+>>> # 逆运算 DataFrame to hierarchical indexing
+>>> data.unstack().stack()
+```
+
+`DataFrame` 中的每条轴(行/列)都可以有分层索引,每层都可以有名字
+
+```python
+>>> # 行索引/列索引同时分层
+>>> frame = pd.DataFrame(np.arange(12).reshape((4, 3)),
+                         index=[['a', 'a', 'b', 'b'], [1, 2, 1, 2]],
+                         columns=[['Ohio', 'Ohio', 'Colorado'],
+                                  ['Green', 'Red', 'Green']])
+>>> frame
+     Ohio     Colorado
+    Green Red    Green
+a 1     0   1        2
+  2     3   4        5
+b 1     6   7        8
+  2     9  10       11
+>>> # 命名
+>>> frame.index.names = ['key1', 'key2']
+>>> frame.columns.names = ['state', 'color']
+>>> frame
+state      Ohio     Colorado
+color     Green Red    Green
+key1 key2                   
+a    1        0   1        2
+     2        3   4        5
+b    1        6   7        8
+     2        9  10       11
+```
+
+### 重排与分级排序
+
+`swaplevel` 重新调整某轴上各级别顺序
+
+`sort_index` 根据单个级别中的值对数据进行排序
+
+```python
+>>> # swaplevel 可以传入等级索引或等级名称
+>>> frame.swaplevel('key1', 'key2')
+
+>>> # sort_index 可以传入等级索引或等级名称
+>>> frame.sort_idnex(level=1)
+
+>>> frame.swaplevel(0, 1).sort_index(level='key2')
+```
+
+### 根据级别统计
+
+许多对 `DataFrame`  和 `Series` 进行统计时都有一个 `level` 选项,根据 `level` 进行统计
+
+```python
+>>> # 继上面 frame 进行求和
+>>> # 行
+>>> frame.sum(level='key2')
+state  Ohio     Colorado
+color Green Red    Green
+key2                    
+1         6   8       10
+2        12  14       16
+>>> # 列
+>>> frame.sum(level='color', axis=1)
+color      Green  Red
+key1 key2            
+a    1         2    1
+     2         8    4
+b    1        14    7
+     2        20   10
+```
+
+### 使用 DataFrame 的列进行索引
+
+`set_index` 方法将列变成行索引
+
+```python
+>>> frame2 = pd.DataFrame({'a': range(7), 'b': range(7, 0, -1),
+                           'c': ['one', 'one', 'one', 'two', 'two',
+                                 'two', 'two'],
+                           'd': [0, 1, 2, 0, 1, 2, 3]})
+>>> frame2
+>>> # 将列设置成索引,drop 参数指定是否保留列
+>>> frame3 = frame2.set_index(['c', 'd'])
+>>> frame3
+       a  b
+c   d      
+one 0  0  7
+    1  1  6
+    2  2  5
+two 0  3  4
+    1  4  3
+    2  5  2
+    3  6  1
+```
+
+`reset_index` 与 `set_index` 功能相反,将层次化索引移到列
+
+### 合并数据集
 
