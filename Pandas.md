@@ -642,3 +642,67 @@ dtype: int64
 
 ### 检测和过滤异常值
 
+利用数组运算实现过滤异常值
+
+```python
+>>> # 生成一个正态分布的 DataFrame
+>>> data = pd.DataFrame(np.random.randn(1000, 4))
+>>> data.describe()
+>>> # 找出某列绝对值大于 3 的值
+>>> col = data[2]
+>>> col[np.abs(col) > 3]
+127    3.953111
+525    3.279284
+595    3.022792
+748   -4.068894
+864   -3.602331
+990    3.335121
+Name: 2, dtype: float64
+>>> # 选出全部绝对值大于 3 的行,用 any
+>>> data[(np.abs(data) > 3).any(1)]
+```
+
+替换过滤出来的值
+
+```python
+>>> # 将绝对值大于 3 的值替换
+>>> # np.sign 广播到每个值,判断值是否大于/小于/等于 0,并返回1/-1/0
+>>> data[np.abs(data) > 3] = np.sign(data) * 3
+```
+
+### 排列和随机采样
+
+利用 `numpy.random.permutation` 函数实现对 `Series` 或 `DataFrame` 的排列,
+
+```python
+>>> df = pd.DataFrame(np.arange(20).reshape((5, 4)))
+>>> sampler = np.random.permutation(5)
+>>> df.take(sampler)
+>>> # 默认不替换原数据,可用 replace 设置
+>>> da.sample(n=3)
+```
+
+### 计算指标/哑变量
+
+
+
+## 字符串操作
+
+### Python 内置对字符串的处理
+
+
+
+### 正则
+
+
+
+### pandas 的矢量化字符串函数
+
+
+
+## 数据规整: 聚合/合并/重塑
+
+### 层次化索引
+
+层次索引让一个轴上有多个索引级别,能以低纬度刑事处理高纬度数据.
+
