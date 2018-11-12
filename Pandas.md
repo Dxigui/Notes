@@ -89,7 +89,7 @@ a	1	2
 b	3	4
 c	5	6
 d	7	8
->>> # 跳过文本的某一些行数
+>>> # 跳过文本的某一些行数,不是下标
 >>> pd.read_csv('./example/test3.csv', shiprows=[1,2,4])
   key1 key2  value1  value2
 0  one    c       5       6
@@ -143,7 +143,7 @@ If you want to only read a small
 >>> # chunksize 迭代取出
 >>> ch = pd.read_csv('examples/ex6.csv', chunksize=1000)
 >>> # usecols 指定读取列
->>> pd.read_csv('examples/ex6.csv')
+>>> pd.read_csv('examples/ex6.csv', usecols=[])
 ```
 
 ### 将数据写到文本
