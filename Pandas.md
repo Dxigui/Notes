@@ -865,3 +865,101 @@ two 0  3  4
 
 ### 合并数据集
 
+`Pandas` 对象中的数据可以进行合并
+
+* `pandas.merage` : 可以根据一个或多个键将不同的 `DataFrame` 中的行连接,和 `SQL` 中的 `join` 操作类似
+* `pandas.concat` 可以沿一条轴将多个对象堆叠到一起
+* 实例方法 `combine_first` : 可以将重复数据拼接在一起,用一个对象中的值填充另一个对象中的缺失值
+
+1. **类数据库的 DataFrame 合并**
+
+```python
+>>> df1 = pd.DataFrame({'key': ['b', 'b', 'a', 'c', 'a', 'a', 'b'],
+                        'data1': range(7)})
+>>> df2 = pd.DataFrame({'key': ['a', 'b', 'd'],
+                        'data2': range(3)})
+>>> # merge 通过 on 参数指定合并的键
+>>> # how 参数指定合并方式,有内联(inner=>键的交集)/外联(outer=>键的并集)/左右连(left/right=>使用左右表的键), 默认内联
+>>> pd.merge(df1, df2, on='key')
+   data1 key  data2
+0      0   b      1
+1      1   b      1
+2      6   b      1
+3      2   a      0
+4      4   a      0
+5      5   a      0
+>>> # 多对多连接产生的是行的笛卡尔积,即左右两边相同的合并键的积,
+>>> pd.merge(df1, df2, on='key', how='left')
+  key  data1  data2
+0   b      0    1.0
+1   b      1    1.0
+2   a      2    0.0
+3   c      3    NaN
+4   a      4    0.0
+5   a      5    0.0
+6   b      6    1.0
+```
+
+两个对象的列名不相同时,可以分别进行指定
+
+```python
+>>> df3 = pd.DataFrame({'lkey': ['b', 'b', 'a', 'c', 'a', 'a', 'b'],
+                        'data1': range(7)})
+>>> df4 = pd.DataFrame({'rkey': ['a', 'b', 'd'],
+                        'data2': range(3)})
+>>> # left_on/right_on 指定不同列名进行合并
+>>> pd.merge(df3, df4, left_on='lkey', rkey='rkey')
+   data1 lkey  data2 rkey
+0      0    b      1    b
+1      1    b      1    b
+2      6    b      1    b
+3      2    a      0    a
+4      4    a      0    a
+5      5    a      0    a
+```
+
+多个键进行合并,返回的键组合取决于**合并方式**
+
+```python
+>>> left = pd.DataFrame({'key1': ['foo', 'foo', 'bar'],
+                     'key2': ['one', 'two', 'one'],
+                     'lval': [1, 2, 3]})
+>>> right = pd.DataFrame({'key1': ['foo', 'foo', 'bar', 'bar'],
+                      'key2': ['one', 'one', 'one', 'two'],
+                      'rval': [4, 5, 6, 7]})
+>>> # 多键合并, on 传入一个列表,
+>>> pd.merge(left, right, on=['key1', 'key2'], how='outer')
+  key1 key2  lval  rval
+0  foo  one   1.0   4.0
+1  foo  one   1.0   5.0
+2  foo  two   2.0   NaN
+3  bar  one   3.0   6.0
+4  bar  two   NaN   7.0
+```
+
+`merge` 参数
+
+![](https://github.com/Dxigui/Notes/blob/master/img/merge_args2.png)
+
+![](https://github.com/Dxigui/Notes/blob/master/img/merge_args3.png)
+
+2. 索引合并
+
+当 `DataFrame` 中的连接键在 `index` 中时,可以传入 `left_index=True` 或 `right_index=True`(或者两个都传入),以说明以那侧索引做连接键
+
+* 列和索引合并: `pd.merge(left, right, left_on='key', right_index=True`
+* 多列和层次索引合并: `pd.merge(left, right, left_on=['key1', 'key2'], right_index=True`
+* 索引和索引: `pd.merge(left, right, how='outer', left_index=True, right_index=True)`
+
+3. 轴向连接
+
+在 `NumPy` 中可以通过 `np.concatenation` 实现轴连接.
+
+`Pandas` 中用 `pd.concat` 进行轴连接
+
+**对于 Series** 对象
+
+通过指定 `axis` 决定产生新的 `Series(xies=0)` 还是 `DataFrame(axis=1)` ,
+
+`join` 参数指定连接方式 `inner/outer` 默认 `outer`
+
