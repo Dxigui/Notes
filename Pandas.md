@@ -943,7 +943,7 @@ two 0  3  4
 
 ![](https://github.com/Dxigui/Notes/blob/master/img/merge_args3.png)
 
-2. 索引合并
+2. **索引合并**
 
 当 `DataFrame` 中的连接键在 `index` 中时,可以传入 `left_index=True` 或 `right_index=True`(或者两个都传入),以说明以那侧索引做连接键
 
@@ -951,15 +951,68 @@ two 0  3  4
 * 多列和层次索引合并: `pd.merge(left, right, left_on=['key1', 'key2'], right_index=True`
 * 索引和索引: `pd.merge(left, right, how='outer', left_index=True, right_index=True)`
 
-3. 轴向连接
+3. **轴向连接**
 
 在 `NumPy` 中可以通过 `np.concatenation` 实现轴连接.
 
 `Pandas` 中用 `pd.concat` 进行轴连接
 
-**对于 Series** 对象
+* **对于 Series** 对象
 
-通过指定 `axis` 决定产生新的 `Series(xies=0)` 还是 `DataFrame(axis=1)` ,
+`pd.concat` 通过指定 `axis` 决定产生新的 `Series(xies=0)` 还是 `DataFrame(axis=1)` ,
 
 `join` 参数指定连接方式 `inner/outer` 默认 `outer`
+
+`keys` 参数在时可以抽象出一个层次索引 `pd.concat([s1, s2, s3], axis=1, keys=['one','two', 'three'])` ,同样可以通过 `axis` 指定行列
+
+* **对于 DataFrame 对象**
+
+对于 `DataFrame` 这些规则同样适用
+
+```python
+>>> df1 = pd.DataFrame(np.arange(6).reshape(3, 2), index=['a', 'b', 'c'],
+                       columns=['one', 'two'])
+>>> df2 = pd.DataFrame(5 + np.arange(4).reshape(2, 2), index=['a', 'c'],
+                       columns=['three', 'four'])
+
+>>> pd.concat([df1, df2], axis=1 keys=['level1', 'level2'])
+  level1     level2     
+     one two  three four
+a      0   1    5.0  6.0
+b      2   3    NaN  NaN
+c      4   5    7.0  8.0
+>>> # 如果传入一个字典,那么字典的键会当做 keys 选项
+>>> pd.concat({'level1': df1, 'level2': df2}, axis=1)
+  level1     level2     
+     one two  three four
+a      0   1    5.0  6.0
+b      2   3    NaN  NaN
+c      4   5    7.0  8.0
+```
+
+如果 `DataFrame` 没有行索引,是 `Pandas` 默认的,连接时会出现行索引相同的问题,这时需要设置 `ignore_index=True` 
+
+![](https://github.com/Dxigui/Notes/blob/master/img/pd_concat.png)
+
+### 合并重叠数据
+
+`NumPy` 中的 `where`  也可以实现两个 `Series` 合并
+
+```python
+>>> a = pd.Serise()
+>>> b = pd.Series()
+>>> np.where(pd.isnull(a), b, a)
+```
+
+`combine_first`
+
+### 重塑和轴向旋转
+
+1. **重塑层次化索引**
+   * `stack` 方法: 将数据的列转成行
+   * `unstack` 方法: 将数据的行转为列
+
+
+
+
 
