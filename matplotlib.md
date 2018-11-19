@@ -220,3 +220,75 @@ Example format strings::
 >>> axes.text(x, y, 'content', family='monospace', fontsize=10)
 ```
 
+2. 添加箭头
+
+`axes.arrow` 
+
+3. 添加标签
+
+`axes.annotate` 可以在指定的 X 和 Y 坐标绘制标签
+
+3. 添加图形
+
+创建一个 shp 对象,然后通过 `axes.add_patch(shp) 添加倒 subplot 中
+
+```python
+>>> fig = plt.figure()
+>>> axes = fig.add_subplot(1, 1, 1)
+>>> # 第一个参数是图片添加的位置
+>>> cric = plt.Circle((o.7, 0.2), 0.15, color='b', alpha=0.3)
+>>> axes.add_patch(cric)
+```
+
+### 将图片保存到文件
+
+图片通过 `plt.savefig` 保存
+
+```python
+>>> plt.savefig('example.png', dpi=400, bbox_inches='tight')
+```
+
+`savefig` 参数
+
+![](/home/dxigui/git_repositories/notes/Notes/img/plt_savefig_args.png)
+
+### matplotlib 配置
+
+通过 `plt.rc` 修改 `matplotlib` 的全局变量
+
+# 使用 Pandas 和 Seaborn huitu
+
+`Pandas` 中的 `Series` 和 `DataFrame` 都自带 `plot` 绘图方法,可以简化图形绘制,实际上是 `Pandas` 调用 `matplotlib` 进行绘图
+
+## 线形图
+
+###  `Series` 绘制简单线形图
+
+```python
+>>> se = pd.Series(np.random.randn(10).cumsum(), index=np.arange(0, 100, 10))
+>>> se.plot()
+```
+
+`Series` 中的 `index` 参数会被传到 `matplotlib` 来绘制 X 轴,使用 `use_index=False` 禁用该功能,然后通过 `xticks/yticks` 和 `xlim/yxlim` 对 X/Y 轴进行详细的设置
+
+**Series plot 参数** 
+
+![](/home/dxigui/git_repositories/notes/Notes/img/pd_plot_args1.png)
+
+![](/home/dxigui/git_repositories/notes/Notes/img/pd_plot_args2.png)
+
+2. `DataFrame` 绘制
+
+在 `DataFrame` 会将 `columns` 参数中的列名当做 `subplot` 中的图例
+
+```python
+>>> df = pd.DataFrame(np.random.randn(10, 4).cumsum(0),
+                      columns=['A', 'B', 'C', 'D'],
+                      index=np.arange(0, 100, 10))
+>>> df.plot()
+```
+
+**DataFrame plot 参数**
+
+![](/home/dxigui/git_repositories/notes/Notes/img/pd_plot_args3.png)
+
