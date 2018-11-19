@@ -292,3 +292,88 @@ Example format strings::
 
 ![](/home/dxigui/git_repositories/notes/Notes/img/pd_plot_args3.png)
 
+## 柱形图
+
+`plot.bar()` 和 `plot.barch()` 分别绘制水平和垂直的柱形图.
+
+1. `Series`
+
+```python
+>>> fig, axes = plt.subplots(2, 1)
+>>> data = pd.Series(np.random.randn(16), index=list('abcdefghijklmnop'))
+>>> data.plot.bar(ax=axes[0], color='k', alpha=0.7)
+>>> data.plot.barh(ax=axes[1], color='k', alpha=0.7)
+>>> # 通过 value_counts() 统计频次再绘图
+>>> data.value_counts().plot.bar()
+```
+
+2. `DataFrame`
+
+```python
+>>> df = pd.DataFrame(np.random.rand(6, 4),
+                      index=['one', 'two', 'three', 'four', 'five', 'six'],
+                      columns=pd.Index(['A', 'B', 'C', 'D'], name='Genus'))
+>>> # 列名 Genus 被当做了图例的标题
+>>> df.plot.bar()
+```
+
+可以经参数 `stacked=True` 即生成堆积柱状图
+
+```python
+>>> df.plot.barh(stacked=True)
+```
+
+对 `DataFrame` 的行进行规格化,使得每行的和为 1
+
+```python
+>>> # sum 让每个轴按比例规格化使轴的和都等于传入的值
+>>> new = old.div(old.sum(1), axis=0)
+```
+
+利用 `Seaborn` 绘图
+
+```python
+>>> import seaborn as sns
+>>> # 利用 seaborn 自带的小费数据集
+>>> tips = sns.load_dataset('tips')
+>>> # 设置柱状图外形,sns 很多设置都可以通过 set 设置
+>>> sns.set(style='whitegrid')
+>>> # 生成图片
+>>> sns.barplot(x='day', y='total_bill', data=tips)
+>>> # 额外值设置 hue 参数
+>>> sns.barplot(x='day', y='total_bill', hue='time', data=tips)
+```
+
+## 直方图和密度图
+
+直方图(histogram)是一种对值频率进行离散化的柱状图.数据点被拆分到离散的/间隔均匀的面元中,绘制的各方面中数据点的数量.
+
+密度图(KDE)是通过计算可能会产生观测数据的连续概率分布的估计.一般的规程是将该分布近似一组核(简单的正态分布),
+
+1. `matplotlib`
+
+直方图
+
+```python
+>>> # 继续使用 sns 提供的数据生成直方图
+>>> tips['tip'].plot.hist(bins=50)
+```
+
+密度图
+
+```python
+>>> tips['tip'].plot.density()
+```
+
+2. `seaborn`
+
+`seaborn` 可以同时在一张图中画出直方图和密度图
+
+```python
+>>> comp1 = np.random.normal(0, 1, size=200)
+>>> comp2 = np.random.normal(10, 2, size=200)
+>>> # 组合两个 array
+>>> values = pd.Series(np.concatenate([comp1, comp2]))
+>>> sns.distplot(values, bins=100, color='k')
+```
+
