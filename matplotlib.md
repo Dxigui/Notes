@@ -250,7 +250,7 @@ Example format strings::
 
 `savefig` 参数
 
-![](/home/dxigui/git_repositories/notes/Notes/img/plt_savefig_args.png)
+![](https://github.com/Dxigui/Notes/blob/master/img/plt_savefig_args.png)
 
 ### matplotlib 配置
 
@@ -273,9 +273,9 @@ Example format strings::
 
 **Series plot 参数** 
 
-![](/home/dxigui/git_repositories/notes/Notes/img/pd_plot_args1.png)
+![](https://github.com/Dxigui/Notes/blob/master/img/pd_plot_args1.png)
 
-![](/home/dxigui/git_repositories/notes/Notes/img/pd_plot_args2.png)
+![](https://github.com/Dxigui/Notes/blob/master/img/pd_plot_args2.png)
 
 2. `DataFrame` 绘制
 
@@ -290,7 +290,7 @@ Example format strings::
 
 **DataFrame plot 参数**
 
-![](/home/dxigui/git_repositories/notes/Notes/img/pd_plot_args3.png)
+![](https://github.com/Dxigui/Notes/blob/master/img/pd_plot_args3.png)
 
 ## 柱形图
 
@@ -375,5 +375,27 @@ Example format strings::
 >>> # 组合两个 array
 >>> values = pd.Series(np.concatenate([comp1, comp2]))
 >>> sns.distplot(values, bins=100, color='k')
+```
+
+## 散布图和点图
+
+```python
+>>> sns.regplot('m1', 'unemp', data=trans_data)
+>>> plt.title('Changes in log %s versus log %s' % ('m1', 'unemp'))
+```
+
+散布图矩阵
+
+```python
+>>> sns.pairplot(trans_data, diag_kind='kde', plot_kws={'alpha': 0.2})
+```
+
+## 分面网格(facet grid) 和数据类型
+
+分面网格多用于有多分类变量的数据
+
+```python
+>>> sns.factorplot(x='day', y='total_bill', hue='time', col='smoker',
+                   kind='bar', data=tips[tips.total_bill < 30])
 ```
 
