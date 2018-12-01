@@ -707,7 +707,7 @@ Name: 2, dtype: float64
 层次索引(hierarchical indexing)让一个轴上有多个索引级别,能以低纬度刑事处理高纬度数据.
 
 ```python
->>> data = pd.Series(np.random.randn(9),
+>>> data = pd.DataFrame(np.random.randn(9),
                      index=[['a', 'a', 'a', 'b', 'b', 'c', 'c', 'd', 'd'],
                             [1, 2, 3, 1, 3, 1, 2, 2, 3]])
 >>> data
