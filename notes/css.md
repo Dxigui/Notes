@@ -138,7 +138,7 @@
 
       复写和 padding 一样; 外边距可以使块级盒子**水平居中** ,但盒子必须要有高度且**左右外边框**都设置成 auto; eg: margin: 0 auto;
 
-      父元素中套嵌子盒子时,会出现塌陷. 解决方法
+      父元素中套嵌子盒子时,会出现塌陷(父子盒子同时给外边距时,父元素和子元素的边距会重叠,并且外边距大小取决于外边距大的). 解决方法
 
       * 给父元素定义边框
       * 给父元素定义内边框
@@ -260,4 +260,10 @@
 
        
 
-       
+9.  CSS 属性书写顺序
+
+   1. 布局定位属性: display/position/float/clear/visibility/overflow
+
+   2. 自身属性: width/height/margin/padding/border/background
+   3. 文本属性: color/gont/text-decoration/text-align/vertical-align/white-space/break-word
+   4. 其他属性(CSS3): content/cersor/border-radius/box-shadow/text-shadow/background:linear0gradient...
