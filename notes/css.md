@@ -30,7 +30,7 @@
 
       * 伪类选择器: 冒号
 
-        链接伪类选择器: a:link(为访问的链接);a:visited(访问过的链接); a:hover(鼠标经过的链接); a:active(鼠标点击未弹起链接)
+        链接伪类选择器: a:link(未访问的链接);a:visited(访问过的链接); a:hover(鼠标经过的链接); a:active(鼠标点击未弹起链接)
 
         :focus 选取获得焦点的元素选择出,一般用于表单中 input 元素
 
@@ -111,10 +111,153 @@
 
    1. border
 
+      盒子会和边框叠加,
+
       * border-style: solid (实线) | dashed (虚线) | dotted (点线)
       * border-color: 颜色;
       * border-width: 4px; 
 
       复合 border: 1px solid #fff; 没顺序要求
 
-   2. 
+      * border-collapse: collapse; 合并相邻边框
+
+   2. padding
+
+      padding-left/right/top/buttom: 10px;
+
+      复合
+
+      * padding: 5px; 上下左右都是 5px
+      * padding: 5px 10px; 上下 5px; 左右 10px
+      * padding:5px 10px 20px; 上 5px 左右 10px 下 20px
+      * padding: 5px 10px 20px 30px; 上 右 下 左
+
+   3. margin
+
+      margin-top/left/buttom/right: 10px;
+
+      复写和 padding 一样; 外边距可以使块级盒子**水平居中** ,但盒子必须要有高度且**左右外边框**都设置成 auto; eg: margin: 0 auto;
+
+      父元素中套嵌子盒子时,会出现塌陷. 解决方法
+
+      * 给父元素定义边框
+      * 给父元素定义内边框
+      * 给父元素添加 overflow: hidden;
+
+   4. 圆角边框
+
+      border-radius: 像素 | 百分比;
+
+   5. 盒子阴影
+
+      box-shadow: h-shadow(水平阴影必须) v-shadow(垂直阴影必须) blur(模糊距离可选) spread(阴影尺寸可选) color(颜色可选);
+
+      不占用空间
+
+   6. 文字阴影
+
+      text-shadow:h-shadow(水平阴影必须) v-shadow(垂直阴影必须) blur(模糊距离可选)  color(颜色可选);
+   
+8. 浮动
+
+   传统网页布局三种方式: **标准流(文档流/普通流)**;**浮动**; **定位**; 一个网页基本包含这三种布局方式
+
+   * 标准流: 标签按照规定好得默认方式排列
+
+     * 块级元素会独占一行,
+
+       div; hr; p; h1~h6; ul; ol; dl; form; table
+
+     * 行内元素按顺序从左至右排列,遇到父元素边缘自动换行
+
+       span; a; i; em;
+
+   * 浮动
+
+     用于创建浮动框,将其移动到一边,直到触及边缘或另一个浮动框边缘
+
+     选择器 {float: none | left | right;}
+
+     + 特性
+
+       1. 浮动元素会**脱离标准流**(俗称脱标)
+
+       2. 浮动元素会在一行内显示元素并顶部对齐
+
+       3. 浮动元素会具有行内块元素特性
+
+          任何元素都可以浮动, 浮动后具有行内块元素相似特性, 行内元素变行内块, 块变行内块
+
+          块级盒子如果没设置宽度,浮动后得大小根据内容来定
+
+          浮动的盒子中间没有间隙,紧挨一起
+
+          配合标准流的父级盒子使用, 用父级元素约束浮动盒子, 父盒子一般不给高度,
+
+          浮动只会影响后面的标准流, 不会影响前面的标准流
+
+     + 清除浮动
+
+       + 选择器 {clear: both | left |  right} ;本质是**闭合浮动** ,让浮动只在父盒子中生效, 让没有设置高度的父盒子包裹浮动的子盒子
+
+       + 额外标签法也称隔墙法, W3C 推荐做法
+
+         在浮动元素末尾添加空标签, 并设置 clear: both 样式
+
+       + 父级加 overflow 属性
+
+         代码简洁, 但是无法显示溢出部分
+
+       + 父级加 after 元素
+
+         >.clearfix:after {
+         >
+         >​	content: "";
+         >
+         >​	display: block;
+         >
+         >​	height: 0;
+         >
+         >​	clear: both;
+         >
+         >​	visibility: hidden;
+         >
+         >}
+         >
+         >.clearfix {	
+
+         > /* IE 6,7 兼容 */
+         >
+         >​	*zoom: 1;
+         >
+         >}
+         >
+         >
+
+       + 父级加双伪元素
+
+         >.clearfix:before,
+         >
+         >.clearfix;after {
+         >
+         >​	content: "";
+         >
+         >​	display:table;
+         >
+         >}
+         >
+         >.clearfix:after {
+         >
+         >​	clear: both;
+         >
+         >}
+         >
+         >.clearfix {
+         >
+         > *zoom: 1;
+         >
+         >}
+
+       
+
+       
