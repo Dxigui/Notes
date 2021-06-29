@@ -263,7 +263,318 @@
 9.  CSS 属性书写顺序
 
    1. 布局定位属性: display/position/float/clear/visibility/overflow
-
    2. 自身属性: width/height/margin/padding/border/background
    3. 文本属性: color/gont/text-decoration/text-align/vertical-align/white-space/break-word
    4. 其他属性(CSS3): content/cersor/border-radius/box-shadow/text-shadow/background:linear0gradient...
+
+## DAY3
+
+10. 定位
+
+    定位 = 定位模式 + 边偏移
+
+    **定位模式**用于指定一个元素在文档中的定位方式
+
+    **边偏移** 则决定该元素的最终位置
+
+    
+
+    * 定位模式
+
+      position: static(静态定位) | relative(相对定位) | absolute(绝对定位) | fixed(固定定位)
+
+    * 边偏移
+
+      top | bottom | left | right: 像素;
+
+    1.  静态定位相当于标准流
+
+    2.  相对定位: 相对于自己原来的位置来移动, 原位置继续占有,其他元素不能占有
+
+    3. 绝对定位: 相对父元素移动,绝对定位的盒子不能用 margin:auto 来水平居中
+
+       * 没有父元素或父元素没有定位则以浏览器为准定位
+
+       * 父元素有定位,子元素则定位以父元素为准,父元素没有定位,则以最近的一级带有定位元素为准
+       * 绝对定位不占有原来位置
+
+    **子绝父相** :子元素绝对定位时,父元素用相对定位
+
+    4. 固定定位: 固定在浏览器可视窗口, 以浏览器可视窗口定位
+       * 和父元素没关系
+       * 不随滚动条滚动
+       * 不占有原来位置
+
+    5. 粘性定位 : 以浏览器窗口为定位标准
+
+       position: sticky;
+
+       * 占原先位置
+       * 必须添加一个 top/left/right/bottom
+
+    6. 定位叠放次序 
+
+       z-index: 正负整数;
+
+       数字越大,元素的定位位置越高,数值最大的在最上面; 如果没有设置,则后来居上,
+
+    7. 定位特殊性
+
+       * 行内元素添加绝对或相对定位,可以设置宽高,和浮动类似
+       * 块级元素加绝对或相对定位,如果不设置宽高,盒子为内容宽高
+       * 浮动元素, 绝对定位(固定定位),不会出现外边距重合(塌陷)
+       * 浮动会覆盖下面标准流盒子,但是不会覆盖盒子中的内容(文字/图片); 但绝对定位(固定定位)会压住标准流所有内容
+
+11. 元素显示和隐藏
+
+    让一个元素在页面中隐藏或显示出来
+
+    * display 显示隐藏
+    * visibility 显示隐藏
+    * overflow 溢出显示隐藏
+
+    1. display 
+
+       display: none(隐藏元素) | block(显示元素);  **display 隐藏元素后,不在占有原来位置**
+
+    2. visibility
+
+       visibility: visible(元素可视) | hidden(元素隐藏) ; **隐藏元素后,继续占有原来位置**
+
+    3. overflow
+
+       overflow: visible | hidden | auto | scroll
+
+高级技巧
+
+12. 精灵图
+
+    有效减少服务器请求,减少服务器压力
+
+    通过 background-position 实现
+
+13. 字体图标 iconfont
+
+    网页中一些轻量小图标可以使用字体图标. 本质是**文字**
+
+    * 轻量级: 比图像小, 一旦加载立马渲染, 减少服务器请求
+    * 灵活性强: 本质是文字,可以改颜色,产生阴影,透明效果等
+    * 兼容性强
+
+    icomoon / 阿里 iconfont
+
+14. 三角形实现
+
+    定义一个空盒子,给空盒子加边框
+
+    >div {
+    >
+    >​	width: 0;
+    >
+    >​	height: 0;
+    >
+    >​	line-height: 0;
+    >
+    >​	font-size: 0;
+    >
+    >​	border: 5px solid transparent;  /*定义一个 5px 边框并透明 */
+    >
+    >​	border-top-color: red; /* 根据三角形方向选择 top/left/right/bottom */
+    >
+    >}
+    >
+    >
+
+15. 用户界面
+
+    1. 更改鼠标样式
+
+       ​	选择器 { corsor: default | pointer(小手) | move(移动) | text(文本) | not-allowed(禁止) }
+
+    2. 防止拖拽文本域
+
+       ​	textarea {resize: none}
+
+    3. 取消表单轮廓
+
+       ​	input { outline: none}
+
+    4. vertical-line
+
+       ​	让元素垂直对齐方式, 设置图片和文字对齐方式, 只对块和行内块元素有效
+
+       ​	选择器 { vertical-line: bottom(底线对齐) | middle (垂直居中,)}
+
+    5. 图片底部默认空白缝隙问题
+
+       ​	给图片添加 vertical-line: top | bottom | middle
+
+       ​	将图片转为块元素
+
+16. 溢出文字省略号显示
+
+    1. 单行文本
+
+    >/* 三步完成
+    >
+    >1.让文字强制显示为一行 */
+    >
+    >white-apace: nowrap;  (默认 normal 自动换行)
+    >
+    >2.超出部分隐藏
+    >
+    >overflow: hidden;
+    >
+    >3.用省略号代替超出部分
+    >
+    >text-overflow: ellipsis;
+    >
+    >
+
+    2. 多行文本
+
+    > overflow: hidden;
+    >
+    > text-overflow: ellipsis;
+    >
+    > 弹性伸缩盒子模型显示
+    >
+    > display: -webkit-box;
+    >
+    > 限制在一个块元素显示的文本的行数
+    >
+    > -wibkit-line-clamp: 2;
+    >
+    > 设置或检索伸缩盒对象的子元素的排列方式
+    >
+    > -webkit-box-orient: vertical;
+
+17. 常见布局
+
+    1. margin 负值
+
+       边框重叠,
+
+    2. 文字围绕浮动元素
+
+    3. 行内块
+
+    4. 直角三角形
+
+       >div {
+       >
+       >​	width: 0;
+       >
+       >​	height: 0;
+       >
+       >​	border-color: transparent red transparent transparent;
+       >
+       >​	border-width: 10px 5px 0 0;
+       >
+       >​	border-style: solid;
+       >
+       >}
+
+18. HTML5 和 CSS3 
+
+    1. HTML5 的新语义化标签
+
+       * header 头部标签
+       * nav 导航栏标签
+       * article 内容标签
+       * section 定义文档某区域
+       * aside 侧边栏标签
+       * footer 尾部标签
+
+    2. HTML5 新增多媒体标签
+
+       * audio 音频
+       * video 视频   <video src="" controls="controls"></video>
+
+    3. HTML5 新增 input 类型
+
+       * type=email 限制输入必须为邮箱
+       * url 限制为 URL 类型
+       * date 限制作为日期类型
+       * time 限制为时间类型
+       * month 限制为月类型
+       * week 周
+       * number 限制为数字
+       * tel 手机号码
+       * search 搜索框
+       * color 生成一个颜色选择表单
+
+    4. HTML5 新增表单属性
+
+       * required="required"  表单拥有该属性表示其内容不能为空,必填
+       * **placeholder**="提示文本" 表单的提示信息,存在默认值将不显示
+       * autofocus="autofocus" 自动聚焦属性, 页面加载完成自动聚焦到指定表单
+       * **multiple**="multiple" 可以多选文件提交
+       * autocomplete="off/on" 显示提交历史, off(关)/on(开)
+
+    5. CSS3  新增属性选择器
+
+       选择 HTML 标签中的属性,例: <input value="">  >>>  input[value] {color: red}
+
+       **属性选择器和类选择器,伪类选择器权重一样**
+
+       * E[att] 选择具有 att 属性的 E 元素
+       * E[att="val"] 选择具有 att 属性且属性值等于 val 的 E 元素
+       * E[att^="val"] 匹配具有 att 属性且值以 val 开头的 E 元素
+       * E[att$="val"] 匹配具有 att 属性且值以 val 结尾的 E 元素
+       * E[att*="val"] 匹配具有 att 属性且值中含有 val 的 E 元素
+
+    6. 结构伪类选择器
+
+       * E:first-child 匹配父元素中的第一个子元素
+
+       * E:last-child 匹配父元素中的最后一个子元素
+
+       * E:nth-child(n) 匹配父元素的第 n 个元素或多个特定的子元素
+
+         n : n  可以是数字,关键字和公式
+
+         1. 关键字: even 偶数, odd 奇数
+         2. 公式: E:nth-child(n| 2n | 2n+1 | 5n | n+5 |-n+5      n 从 0 开始直到所有元素个数
+         3. 数字: 具体第 n 个元素
+
+       * E:first-of-type
+
+       * E:last-of-type
+
+       * E:nth-of-type(n)  结果和 nth 一样
+
+       区别:
+
+       ​	E:nth-child(n), 会把所有盒子排列,   执行时先看 :nth-child(n) 然后看 E 是否匹配
+
+       ​	E: nth-of-type(n) , 吧指定元素盒子排列, 执行时先看 E 指定的元素, 再看第几个子元素
+
+    7. 伪元素选择器
+
+       ::before 创建一个元素在父元素前面
+
+       ::after  创建一个元素在父元素后面
+
+       语法: elment::before | after{} ; elment 为父元素
+       必须要有 content 属性, **权重和标签选择器一样**
+
+    8. CSS3 新盒子模型
+
+       CSS3 通过 box-sizing 来制定盒子模型, E {box-sizing: content-box | border-box}
+
+       content-box 和以前一样, 盒子大小为 width + padding + border
+
+       border-box 盒子大小为 width, padding 和 border 不会撑大盒子
+
+    9. CSS3 滤镜
+
+       filter
+
+    10. CSS3 calc 函数
+
+        可以进行 + - * /  (加减乘除)
+
+    11. CSS3 过度效果
+
+        transition: 要过渡的属性 花费的时间 运动曲线(默认ease) 何时开始(单位s 默认0)
