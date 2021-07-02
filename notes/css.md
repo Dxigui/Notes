@@ -40,17 +40,17 @@
 
    1. 块元素
 
-      独占一行,能被修改高度,宽度,行边距,是一个容器, <p> <h1> 中不能放 <div>
+      独占一行,能被修改高度,宽度,行边距,是一个容器, `<p> <h1>` 中不能放 `<div>`
 
    2. 行内元素
 
-      <a> ; <strong> ; <b> ; <em> ; <i> ; <del> ; <s> ; <ins> ; <u> ; <span> 
+      `<a> ; <strong> ; <b> ; <em> ; <i> ; <del> ; <s> ; <ins> ; <u> ; <span> `
 
       一行可以多个行内元素,无法设置宽高,只能放文本或其他行内元素,
 
    3. 行内块元素
 
-      同时具备块元素又有行内元素特点: <img /> <input /> <td>
+      同时具备块元素又有行内元素特点: `<img /> <input /> <td>`
 
    4. 元素转换
 
@@ -264,8 +264,8 @@
 
    1. 布局定位属性: display/position/float/clear/visibility/overflow
    2. 自身属性: width/height/margin/padding/border/background
-   3. 文本属性: color/gont/text-decoration/text-align/vertical-align/white-space/break-word
-   4. 其他属性(CSS3): content/cersor/border-radius/box-shadow/text-shadow/background:linear0gradient...
+   3. 文本属性: color/font/text-decoration/text-align/vertical-align/white-space/break-word
+   4. 其他属性(CSS3): content/cursor/border-radius/box-shadow/text-shadow/background:linear-gradient...
 
 ## DAY3
 
@@ -578,3 +578,17 @@
     11. CSS3 过度效果
 
         transition: 要过渡的属性 花费的时间 运动曲线(默认ease) 何时开始(单位s 默认0)
+
+
+
+
+
+**DAY4**
+
+19. 网页 LOGO SEO 优化
+
+    div>h1>a{内容(一般为网站名称)}; 同时给 a 标签一个 title 属性
+
+    a 中内容隐藏: overflow:hidden; 或者 text-indent:-299px; +overflow:hidden;
+
+20. tab-list>tab-content 
