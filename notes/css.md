@@ -592,3 +592,104 @@
     a 中内容隐藏: overflow:hidden; 或者 text-indent:-299px; +overflow:hidden;
 
 20. tab-list>tab-content 
+
+
+
+##### DAY5
+
+21. 2D转换之位移
+
+    transform 移动**不会影响其他元素**, 对行内元素无效; 配合 transition 过渡
+
+    `transform: translate(x, y);`  x y 可以是数值, 也可以是百分比,百分比是相对自身宽高
+
+22. 2D 转换之旋转
+
+
+
+​		`transform: rotate(旋转度数deg); `
+
+​		`transform-origin: x y;` 设置旋转中心点
+
+
+
+23. 2D 转换之放大
+
+    不会影响对他元素
+
+​		`transform: scale();`
+
+24. 动画
+
+    先定义动画, 然后调用动画
+
+    1. 定义动画
+
+       >@keyframs move{
+       >
+       >/* 开始状态  0% 和 100% 为动画序列*/
+       >
+       >0% {
+       >
+       >​	transform: translateX(0px);
+       >
+       >}
+       >
+       >/* 结束状态 */
+       >
+       >100% {
+       >
+       >​	transform: translateX(1000px);
+       >
+       >}
+       >
+       >}
+
+    2. 使用动画
+
+       >
+       >
+       >div {
+       >
+       >animation-name: move;
+       >
+       >animation-duration: 2s;
+       >
+       >}
+
+    3. 动画序列
+
+       * from to
+       * 0% 100% : 可以是两个阶段,也可以多个阶段; 0% 25% 50% 75% 100%, 形成一个闭环
+
+    4. 属性
+
+       * @keyframs 定义动画并规定动画名
+       * animation
+       * animation-name : 动画名称
+       * animation-duration : 动画完成时间
+       * animation-timing-function : 动画速度曲线,默认 ease; steps(步数) 动画完成所需步数
+       * animation-delay : 动画何时开始
+       * animation-iteration-count : 动画重复次数; 无限循环 infinite
+       * animation-direction : 动画是否逆方向播放
+       * animation-fill-mode : 动画结束后状态, 默认 backwards(返回起始状态), forwards(保持最后状态)
+       * animation-paly-status : 动画暂停和启动,可以配合类选择器 :hover
+
+25. 3D 转换
+
+    父元素定义 perspective: 像素; 才能出现 3d 效果, 相当于视距效果
+
+    1. 3D 移动 translate3d
+
+       * transform: translateX() translateY () translateZ();
+       * transform: translate3d (x, y, z);
+
+    2. 3D 旋转 rotate3d() 沿轴选择
+
+       * transform: rotateX(deg) rotateY(deg) rotateZ(deg); 
+       * transform: rotate3d(x, y, z,deg);  xyz 定义旋转轴, deg 定义旋转角度
+
+    3. 3D 呈现 transform-style
+
+       控制 3d 效果的开启或关闭;  preserve-3d 开启 3d 环境;默认关闭;給父级添加
+
