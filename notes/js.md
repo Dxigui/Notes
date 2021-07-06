@@ -144,3 +144,344 @@
         >// 先执行循环体, 再进行条件判断, do while 至少循环一次
 
       * continue / break
+   
+8. 数组
+
+   1. 创建
+
+      * new 创建: `var arr = new Array();`  创建一个空数组
+      * 数组字面量创建: `var arr = [];`  
+
+   2. slice()
+
+      和字符串中的 substring() 一样, 截取数组中的元素,不改变原数组
+
+   3. push() 和 pop()
+
+      * push() 向数组末尾添加若干元素
+      * pop() 把数组最后一个元素删除
+
+   4. unshift() 和 shift()
+
+      * unshift() 往数组头部添加若干元素
+      * shift() 把数组第一个元素删除
+
+   5. sort()
+
+      对数组排序
+
+   6. reverse()
+
+      把整个数组反转
+
+   7. splice()
+
+      >```javascript
+      >var arr = ['Microsoft', 'Apple', 'Yahoo', 'AOL', 'Excite', 'Oracle'];
+      >// 从索引2开始删除3个元素,然后再添加两个元素:
+      >arr.splice(2, 3, 'Google', 'Facebook'); // 返回删除的元素 ['Yahoo', 'AOL', 'Excite']
+      >arr; // ['Microsoft', 'Apple', 'Google', 'Facebook', 'Oracle']
+      >// 只删除,不添加:
+      >arr.splice(2, 2); // ['Google', 'Facebook']
+      >arr; // ['Microsoft', 'Apple', 'Oracle']
+      >// 只添加,不删除:
+      >arr.splice(2, 0, 'Google', 'Facebook'); // 返回[],因为没有删除任何元素
+      >arr; // ['Microsoft', 'Apple', 'Google', 'Facebook', 'Oracle']
+      >```
+
+   8. concat()
+
+      把当前数组和另一个数组连接起来,并且不修改当前数组,而是返回一个新的数组
+
+      >var arr = [1, 2, 3];
+      >
+      >var added = arr.concat([5,6,7]);
+
+   9. join()
+
+      把当前数组中的每个元素都用指定的方法串联起来,返回连接后的字符串
+
+      >var arr = ['A', 'B', 'C', 1, 2, 3];
+      >
+      >arr.join('-');
+
+9. 对象
+
+   键值对
+
+   1. Map
+
+      创建 Map : `var m = new Map();` 和对象一样的键值对结构,实现快速查询,可以创建空 Map ,Map 里传入一个二维数组来创建 Map 键值
+
+      创建空的 Map 后,通过 set() 添加: ` m.set('bob', 23);`  `m.has(key);` 查询键; `m.get(key);` 获取 key 的值; `m.delete(key);` 删除 key;
+
+   2. Set
+
+      创建 Set : `var s = new Set();`  Set 是不含 value 的 key 集合,
+
+      s.add(key)
+
+      s.delete(key)
+
+   Map 和 Set 都是 ES6 提出, 是能 iterable 类型,可以通过 for ... of 循环遍历
+
+   >for (var i of m) {
+   >
+   >​	console.log(i);
+   >
+   >}
+
+   iterable 内置方法 forEach ,它接受一个函数,每次迭代就自动回调该函数
+
+   >var a = new Array();
+   >
+   >a.forEach(function(element, index, array){
+   >
+   >​	console.log(element+index)
+   >
+   >})
+   >
+   >// element 指向当前元素的值
+   >
+   >// index 指向当前索引
+   >
+   >// array 指向 Array 对象本身
+   >
+   >
+
+   >var s = new Set();
+   >
+   >s.forEach(function(element sameElement, set){
+   >
+   >// Set
+   >
+   >})
+   >
+   >// Map
+   >
+   >var m = new Map();
+   >
+   >m.forEach(function(value, key, map){
+   >
+   >})
+
+10. 函数
+
+    1. 获取函数所有传入的参数
+
+    ​	arguments 关键字, 只能在函数内使用, 获取所有调用者传入的参数; 类似于一个数组
+
+    2. rest 获取传入的额外参数
+
+    > function foo(a, b, ...rest) {
+    >
+    > }
+
+    3. 变量作用域
+
+       * **局部作用域**和**全局作用域**
+
+         唯一全局作用域 window, 创建的全局变量会绑定到 window 上, 成为 window 的属性,可以通过 window.var ; 这会造成不同文档相同全局变量相冲突,且难以发现, 减少冲突的办法可以创建一个唯一全局变量,将自己的所有变量和函数全部绑定到这个全局变量中;
+
+         >// 唯一全局变量
+         >
+         >var MYAPP = [];
+         >
+         >// 其他变量
+         >
+         >MYAPP.name = 'myapp';
+         >
+         >MYAPP.varsion = 1.0;
+         >
+         >// 其他函数
+         >
+         >MYAPP.foo = function () {
+         >
+         >​	return 'foo';
+         >
+         >};
+
+         let 和 const 和 var 一样定义变量
+
+         let 可以申明一个**块级作用域**
+
+         const 可以申明一个常量,也是具有块级作用域
+
+         let 和 const 关键字都是 ES6 引入
+
+       * 变量提升和函数提升
+
+         js 函数定义时,会先扫描整个函数,并把所有变量提升到当前函数顶部(**当前作用域**), 但是只提升变量的申明, 不会提升变量的赋值, 所以定义函数首先将变量定义.
+
+         
+
+       * 解构赋值
+
+         ES6 引入, 能直接对多个变量赋值, 如果对应的属性不存在,则被赋值为 undefined ;可以通过赋值默认值的方式避免不存在的属性返回 undedined
+
+         >// 数组
+         >
+         >var [x, y, z] = ['a', 'b', 'b'];
+         >
+         >// 多维 层次一样
+         >
+         >var [x, [y, z]] = ['a',['b', 'c']];
+         >
+         >// 忽略某些元素
+         >
+         >var [, , z] = ['a', 'b', 'c'];
+         >
+         >// 对象 key 赋值
+         >
+         >var {x, y, z} = {'a':1, 'b': 2, 'c':3};
+         >
+         >// 对象的嵌套和多维数组一样, 保持层次一样
+       
+    4. 构造函数
+
+       
+
+11. 方法
+
+    给对象中绑定函数,称这个对象的方法
+
+    >// 对象中绑定方法
+    >
+    >var xiaoming = {
+    >
+    >​	name = '小明',
+    >
+    >​	birth: 1995,
+    >
+    >​	age: function () {
+    >
+    >​		var y = new Date().getFullYear();
+    >
+    >​		return y - this.birth;  // this 关键字始终指向当前对象(xiaoming 变量), 所以可以拿到
+    >
+    >​											// 小明的属性, this.birth 等于 xiaoming.birth ;
+    >
+    >​	}
+    >
+    >};
+    >
+    >// this 指向问题: 对象中的函数定义在对象外面时, this 指向会出现两种情况, 
+
+    1. apply() 和 call()
+
+       apply 可以规定 this 指向, apply() 接受两个参数, 第一个是 this 要绑定的变量,第二个是函数本身的参数,是一个数组
+
+       call() 和 apply() 作用相同,区别在于 apply() 把函数参数以**数组** 传入, call() 把参数依次按顺序传入
+
+12. 高阶函数
+
+    函数调用函数
+
+    1. map() 方法
+
+       variable.map(pow);  pow 为函数本身
+
+    2. reduce()
+
+    3. filter()
+
+       arr.filter(func); 传入一个函数, 并依次作用在每个元素上, 根据返回值是 true or false 来判断是否保留元素
+
+    4. sort() 
+
+       sort() 排序是按 ASCII 码大小进行排序
+
+       可以传入自定义排序条件
+
+    5. every()
+
+    6. find()
+
+       查找符合条件的第一个元素, 没有返回 undefined
+
+    7. findIndex()
+
+       和 find() 差不多,如果没找到返回 -1
+
+    8. forEach()
+
+13. 闭包
+
+    函数作为函数的返回值返回
+
+14. 箭头函数
+
+    * 单参数
+
+    > x => x * x;
+
+    * 多参数
+
+    > (x, y) => x * x + y * y
+
+    * 可变参数
+
+    > (x, y, ...rest) => {}
+
+## DOM
+
+
+
+1. DOM 操作
+
+   * document.getElementsById()
+   * document.getElementsByTagName()
+   * document.getElementsByClassName()
+   * document.querySelector() 返回指定选择器的一个元素; 类 .类名 ; id #id;
+   * document.query Selector All() 
+
+2. 事件三要素
+
+   事件包含 **事件源,事件类型,事件处理程序**
+
+3. 修改元素内容
+
+   ​	innerText 和 innerHTML 都能读取和修改元素内容, innerText 会忽略元素标签,空格和换行
+
+   * innerHTML
+   * innerText
+
+4. 修改元素样式
+
+   js 修改的样式是行内样式,权重高
+
+   * element.style
+   * element.className
+
+
+
+
+
+
+
+## TIPS
+
+1.  == 和 ===
+
+   ```
+   一般使用双等来判断（==），如果还需要类型相同那么就用三等（===）。
+   说一下这两个的区别：
+   == equality 等同，=== identity 恒等。
+   ==， 两边值类型不同的时候，要先进行类型转换，再比较。 
+   ===，不做类型转换，类型不同的一定不等。 
+   下面分别说明： 
+   先说 ===，这个比较简单。下面的规则用来判断两个值是否===相等： 
+   1、如果类型不同，就[不相等] 
+   2、如果两个都是数值，并且是同一个值，那么[相等]。
+   3、如果两个都是字符串，每个位置的字符都一样，那么[相等]；否则[不相等]。 
+   4、如果两个值都是true，或者都是false，那么[相等]。 
+   5、如果两个值都引用同一个对象或函数，那么[相等]；否则[不相等]。 
+   6、如果两个值都是null，或者都是undefined，那么[相等]。 
+   再说 ==，根据以下规则： 
+   1、如果两个值类型相同，进行 === 比较。 
+   2、如果两个值类型不同，他们可能相等。根据下面规则进行类型转换再比较： 
+   a、如果一个是null、一个是undefined，那么[相等]。 
+   b、如果一个是字符串，一个是数值，把字符串转换成数值再进行比较。 
+   c、如果任一值是 true，把它转换成 1 再比较；如果任一值是 false，把它转换成 0 再比较。 
+   d、任何其他组合，都[不相等]。
+   ```
