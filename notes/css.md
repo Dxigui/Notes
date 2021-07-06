@@ -88,7 +88,18 @@
 
    7. 背景色半透明
 
-      background: rgba(0, 0, 0, 0.4); a 为透明度 1~0 之间
+      background: rgba(0, 0, 0, 0.4); a 为透明度 1~0 之间background:
+
+   8. radial-gradient() 函数
+
+      用径向渐变创建"图像",其中心有中心点定义
+
+      >background: radial-gradient(shape size at position, start-color, ... , last-color);
+
+      * shape : 确定圆的类型: 默认为 ellipse(椭圆) , circle 圆形
+      * size: 定义渐变的大小;
+      * position: 定义渐变位置
+      *  start-color, ... , last-color: 定义起止颜色, 起止必须有,中间可以定义更多颜色
 
 6. CSS 三大特性
 
@@ -693,3 +704,12 @@
 
        控制 3d 效果的开启或关闭;  preserve-3d 开启 3d 环境;默认关闭;給父级添加
 
+##### DAY6
+
+26. 二倍图
+    1. background-size: px px | conver |contain ;   
+    2. 特殊样式
+       * -webkit-box-sizing
+       * -webkit-top-highlight-color: transparent;  点击链接高亮清除
+       * -webkit-appearance: none;  清除移动端浏览器默认样式
+       * img, a {-webkit-touch-callout:none}  禁止长安页面时弹出菜单
