@@ -452,12 +452,90 @@
 
    * element.style
    * element.className
+   
+5. 获取属性的值
 
+   * Element.属性
+   * Element.getAttribute() 获取自定义属性
+   * Element.getset  获取元素的所有自定义属性集合,date 开头
 
+6. 修改属性值
 
+   * Element.setAttribute('属性', '值')
+   * Element.属性 = 值
+   * 
+   * Element.removeAttribute(属性)
 
+7. 节点操作
 
+   * parentNode
+   * childNodes 会获取所有的子元素节点和子文本节点, 通过 childNode.nodeType 判断节点类型
+   * children 只获取子元素节点\
+   * firstElementChild
+   * nextElementSibling  兄弟节点
+   * previousElementSibling
+   * createElement(element) 创建节点
+   * appendChild(element)  插入到元素后面
+   * insertBefore() 插入到元素前面
+   * node.removeChild(child) 删除元素
+   * node.cloneNode() 克隆 ;括号为空或者为 false, 只拷贝元素标签, true,克隆内容和子节点
+   * document.write() 创建元素, 如果页面文档流加载完毕,在调用会导致页面重绘
 
+   兼容问题分装兼容函数
+
+   > function nextElementSibling(element) {
+   >
+   > ​	var el = element;
+   >
+   > ​	while (el = el.nextSibling) {
+   >
+   > ​		if (el.nodeType === 1) {
+   >
+   > ​			return el;
+   >
+   > ​		}
+   >
+   > ​	}
+   >
+   > ​	return null;
+   >
+   > }
+
+8. 注册事件
+
+   element.addEventListener(type, listener[, usecaptrue])
+
+   type : 事件类型, 字符型, 不用加 on 如 click(点击); focus(焦点)
+
+   listener: 函数
+
+   事件监听 addEventListener 可以对一个元素添加多个相同事件类型
+
+   element.removeEventListener(type, listener) 移除注册事件
+
+9. DOM 事件流
+
+   三阶段: **事件捕获阶段, 目标阶段,冒泡阶段** 
+
+10. 事件对象
+
+    element.onclick = function(event){}
+
+11. 阻止事件
+
+    element.addEventListener   注册可以用 event.preventDefault() 方法
+
+    element.onclick 事件注册方式可以 三种方法 event.preventDefault()/return false / e.returnValue
+
+12. 阻止冒泡
+
+    e.stopPropagation() 正常
+
+    e.cancelBubble = true;  低版本 ie 浏览器
+
+13. 事件委托
+
+    不再给每个节点设置单独事件监听,将事件监听器放在父节点上,利用冒泡原理影响到每个子节点上
 
 ## TIPS
 
