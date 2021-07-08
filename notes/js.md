@@ -536,6 +536,71 @@
 13. 事件委托
 
     不再给每个节点设置单独事件监听,将事件监听器放在父节点上,利用冒泡原理影响到每个子节点上
+    
+14. 键盘事件
+
+    onkeyup / onkeydown / onkeypress 
+
+    * onkeypress  按键按下时执行, 不支持功能键
+
+
+
+## BOM
+
+浏览器对象模型(browser object model)
+
+1. BOM构成
+
+   window 对象是浏览器的顶级对象
+
+   load / DOMContentLoaded
+
+   load : 要等网页内容全部加载完毕才执行
+
+   DOMContentLoaded : 只要 DOM 加载完就执行, 不用等所有内容,加载更快
+
+2. 定时器
+
+   setTimeout(callback, time) 方法 : time 单位是毫秒
+
+   clearTimeout() 停止定时器
+
+   setInterval(callback, time)  循环调用,间隔 time 时间
+
+   clearInterval()
+
+   
+
+15. js 执行队列
+
+    同步和异步
+
+16. location 对象
+
+    * location.href : 返回整个 URL
+    * location,host : 返回域名
+    * location.prot : 返回端口
+    * location.pathname : 返回路径
+    * location.search : 返回参数
+    * location.hash : 返回片段 #后面类容,
+
+17. navigator
+
+
+
+18. 元素偏移量 offset
+
+    offset 可以等到任意样式表中的样式值,获取的值没有单位, offset 是只读属性,不能赋值, 和 style 比, style 可以给元素写入样式, 但是 style 只能获取行内样式 
+
+    offsetTop 
+
+    offsetLeft
+
+    offsetWidth
+
+    offsetParent
+
+
 
 ## TIPS
 
