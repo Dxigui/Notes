@@ -596,11 +596,21 @@
 
     offsetLeft
 
-    offsetWidth
+    offsetWidth : 返回的数值包含边框 padding
 
     offsetParent
 
+19. client
 
+
+
+20. scroll
+
+
+
+21. mouseenter 和 mouseover
+
+    都是鼠标事件,mouseover 鼠标经过自身盒子会触发,经过子盒子也会触发, mouseenter 经过子盒子时不会触发, 因为mouseenter 不会冒泡 
 
 ## TIPS
 
