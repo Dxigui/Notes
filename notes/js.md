@@ -422,6 +422,221 @@
     * 可变参数
 
     > (x, y, ...rest) => {}
+    
+15. 正则
+
+    2 种创建方式
+
+    > var re1 = /\d+/;
+    >
+    > var re2 = new RegExp('\\d+');
+    >
+    > re1.test();   // test(str) 方法测试字符串是否匹配
+
+    匹配规则
+
+    * \* 任意个字符
+    * \+ 至少一个字符
+    * ? 0 个或者 1 个字符
+    * $
+    * ^
+    * \s
+    * \w
+    * \d
+    * () 分组, exec(str) 方法可以返回一个包含所有分组的数组, 没有返回 null
+    * [] 中括号表示范围,
+    * {n} n 个字符
+    * {n, m} n-m 个字符 
+
+    字符串包含多种分割符号时,用正则去匹配分割符更灵活
+
+    >// 切分多空格字符串
+    >
+    >'a d 3   e'.split(/\s+/); //['a', 'd', '3', 'e']
+    >
+    >// 切分多符号
+    >
+    >'a d, 3 e'.split(/[\s\,]+/); //['a', 'd', '3', 'e']
+    >
+    >'a d, 3 ;;e'.split(/[\s\,\;]+/); //['a', 'd', '3', 'e']
+
+    #### 贪婪匹配
+
+    正则默认贪婪匹配, 尽可能的多匹配字符, 通过 ? 限制,变为非贪婪模式
+
+    > var re = /^(\d+)(0*)$/; 
+    >
+    > // 第一组至少以一个数字开头的匹配规则会尽可能地匹配数字
+    >
+    > re.exec('203200'); // ['203200', '203200', '']  
+    >
+    > var re2 =  /^(\d+?)(0*)$/;
+    >
+    > // 限制贪婪
+    >
+    > re.exec('203200'); // ['203200', '2032', '00']  
+
+    #### 特殊标志
+
+    * g : 全局匹配,每次执行 exec() 会更新 lastIndex 属性,根据 lastIndex 属性继续开始匹配,直到没有结果返回 null 为止
+    * i : 忽略大小写
+    * m : 执行多行匹配
+
+    >var re1 = /\d+/g; 等价于 var re2 = new RegExp('\\\d+', 'g');
+    >
+    >```javascript
+    >var s = 'JavaScript, VBScript, JScript and ECMAScript';
+    >var re=/[a-zA-Z]+Script/g;
+    >
+    >// 使用全局匹配:
+    >re.exec(s); // ['JavaScript']
+    >re.lastIndex; // 10
+    >
+    >re.exec(s); // ['VBScript']
+    >re.lastIndex; // 20
+    >
+    >re.exec(s); // ['JScript']
+    >re.lastIndex; // 29
+    >
+    >re.exec(s); // ['ECMAScript']
+    >re.lastIndex; // 44
+    >
+    >re.exec(s); // null，直到结束仍没有匹配到
+    >```
+
+#### 面向对象
+
+prototype 是函数的属性,是一个指针指向一个对象
+
+\__proto__ 是一个对象的内置属性,用于 js 中寻找原型链 
+
+
+
+#### 创建类和实例
+
+>1. 通过对象类型创建类和实例
+>
+>// 创建对象
+>
+>var Student = {
+>
+>​      name: 'name',
+>
+>​      age: 19,
+>
+>​      run: function() {
+>
+>​        console.log(this.name + 'running....');
+>
+>​      }
+>
+>​    };
+>
+>// Object.create 创建一个基于 Student 的空类
+>
+>// 用 createStudent(name) 函数来创建以 Student 为原型的实例
+>
+>​    function createStudent(name) {
+>
+>​      let s = Object.create(Student);
+>
+>​      console.log(s.__proto__);
+>
+>​      s.name = name;
+>
+>​      return s;
+>
+>​    }
+>
+>​    var xiaoming = createStudent('xiaoming');
+>
+>​    console.log(xiaoming);
+>
+>2. 构造函数创建实例和类
+>
+>function Students(name) {
+>
+>​      this.name = name,
+>
+>​        this.hello = function() {
+>
+>​          console.lgo('hello &{name}');
+>
+>​        }
+>
+>​    }
+>
+>​    var ming = new Students(ming);
+>
+>​    console.log(ming);
+>
+>3. 将 hello 属性移动到实例的共享原型上,
+>
+>function Cat(name) {
+>
+>​      this.name = name;
+>
+>​    }
+>
+>Cat.prototype.hello = function() {
+>
+>​      return 'Hello, ' + this.name + '!';
+>
+>​    };
+>
+>4. class 创建类
+>
+>// ES6 
+>
+>class Student {
+>
+>​	constructor(name) {
+>
+>​		this.name = name;
+>
+>}
+>
+>​	hello() {
+>
+>​		console.log('Hello, '+ this.name);
+>
+>}
+>
+>}
+>
+>var xiaoming = new Student('xiaoming');
+
+#### 原型继承
+
+
+
+#### class 继承
+
+class 创建类后,继承也是 class 关键字和 extends
+
+>// extends 申明原型链对象来自 Student
+>
+>class PrimariStudent extends Student { 
+>
+>​	constructor(name, grade) {
+>
+>​		super(name);  // super 调用父类的构造方法
+>
+>​		this.grade = grade;
+>
+>}
+>
+>​	myGrade() {
+>
+>​		console.log('Hello, ' + this.grade);
+>
+>}
+>
+>}
+>
+> 
+
+
 
 ## DOM
 
@@ -476,7 +691,7 @@
    * previousElementSibling
    * createElement(element) 创建节点
    * appendChild(element)  插入到元素后面
-   * insertBefore() 插入到元素前面
+   * insertBefore(newElement, referenceElement) 插入新元素到 referenceElement 元素前面
    * node.removeChild(child) 删除元素
    * node.cloneNode() 克隆 ;括号为空或者为 false, 只拷贝元素标签, true,克隆内容和子节点
    * document.write() 创建元素, 如果页面文档流加载完毕,在调用会导致页面重绘
@@ -584,7 +799,15 @@
     * location.search : 返回参数
     * location.hash : 返回片段 #后面类容,
 
-17. navigator
+5. navigator
+
+   获取浏览器信息
+
+   * navigator.appName; 浏览器名称
+   * navigator.appVersion; 浏览器版本
+   * navigator.language; 浏览器设置的语言
+   * navigator.platform; 操作系统类型
+   * navigator.userAgent; 浏览器设定的 User-Agent 字符串
 
 
 
@@ -604,7 +827,13 @@
 
 
 
-20. scroll
+20. screen
+
+    screen 对象表示屏幕的信息
+
+    * screen.width; 屏幕宽度
+    * screen.height; 屏幕高度
+    * screen.colorDepth; 屏幕颜色位数
 
 
 
@@ -616,7 +845,7 @@
 
 1.  == 和 ===
 
-   ```
+   ```text
    一般使用双等来判断（==），如果还需要类型相同那么就用三等（===）。
    说一下这两个的区别：
    == equality 等同，=== identity 恒等。
@@ -638,3 +867,4 @@
    c、如果任一值是 true，把它转换成 1 再比较；如果任一值是 false，把它转换成 0 再比较。 
    d、任何其他组合，都[不相等]。
    ```
+

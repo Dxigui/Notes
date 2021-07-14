@@ -306,7 +306,7 @@
 
        * 没有父元素或父元素没有定位则以浏览器为准定位
 
-       * 父元素有定位,子元素则定位以父元素为准,父元素没有定位,则以最近的一级带有定位元素为准
+         * 父元素有定位,子元素则定位以父元素为准,父元素没有定位,则以最近的一级带有定位元素为准
        * 绝对定位不占有原来位置
 
     **子绝父相** :子元素绝对定位时,父元素用相对定位
@@ -400,7 +400,7 @@
 
     1. 更改鼠标样式
 
-       ​	选择器 { corsor: default | pointer(小手) | move(移动) | text(文本) | not-allowed(禁止) }
+       ​	选择器 { cursor: default | pointer(小手) | move(移动) | text(文本) | not-allowed(禁止) }
 
     2. 防止拖拽文本域
 
@@ -577,8 +577,6 @@
        content-box 和以前一样, 盒子大小为 width + padding + border
 
        border-box 盒子大小为 width, padding 和 border 不会撑大盒子
-
-    9. CSS3 滤镜
 
        filter
 
