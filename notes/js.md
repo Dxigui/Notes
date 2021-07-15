@@ -757,8 +757,378 @@ class 创建类后,继承也是 class 关键字和 extends
     onkeyup / onkeydown / onkeypress 
 
     * onkeypress  按键按下时执行, 不支持功能键
+    
+15. AJAX
+
+    异步请求
+
+    >```javascript
+    >function success(text) {
+    >	var textarea = document.getElementById('response-info');
+    >	textarea.value = text;
+    >}
+    >function fail(code) {
+    >	var textarea = document.getElementById('response-info');
+    >	textarea.value = text;
+    >}
+    >var request = new XHMHttpReuqeust();
+    >// 当 readState 的值改变时, function 回调函数就会被调用
+    >request.onreadstatechange = function() {
+    >	if (request.readState === 4) {
+    >		//
+    >		if (request.status === 200) {
+    >			//
+    >			return success(request.responseText);
+    >		} else {
+    >			//
+    >			return fail(request.status);
+    >		}
+    >	} else {
+    >		// HTTP 请求还在继续
+    >	}
+    >}
+    >request.open('GET', url);
+    >request.send();
+    >```
+
+    ##### readyState 状态码
+
+    XMLTttpRequest.readyState 属性返回一个 XMLHttpRequest 代理当前所处状态
+
+    * 0 : 代理被创建, 但尚未调用 open() 方法
+    * 1 : open() 方法已经被调用
+    * 2 : send() 方法一被调用, 并且头部和状态yijinghuode
+    * 3 : 下载中, responseText 属性以获得部分数据
+    * 4 : 下载完成
+
+    ##### 跨域请求
+
+    浏览器因为同源请求的限制, 默认情况下只有同源才能请求, 要实现跨域请求
+
+    1. 通过 Flash 插件发送 HTTP 请求
+
+    2. 通过在同源域名下架设一个代理服务器来转发, javaScript 负责把请求发送到代理服务器, 代理服务器再把结果返回
+
+    3. JSONP 请求, 只能用于 GET 请求,并且要求返回 JavaScript, 这种跨域实际利用的是浏览器允许跨域引用 JavaScript 资源
+
+       > ```html
+       > <body>
+       >     <p id="info">Price : </p>
+       >     <button type="button" class="btn" onclick="getPrice()">shuaxin</button>
+       > 
+       >     <script>
+       >         // 动态创建一个在 head 中的 script,并将 src 设置为目标 url
+       >         // 利用浏览器引用外域 JavaScript 资源,实现跨域请求资源
+       >         function getPrice() {
+       >             let head = document.getElementsByTagName('head')[0];
+       >             let js = document.createElement('script');
+       >             js.src = 'http://api.money.126.net/data/feed/0000001,1399001?callback=refreshPrice';
+       >             head.appendChild(js);
+       >         }
+       > 		// 回调函数处理返回的数据
+       >         function refreshPrice(data) {
+       >             console.log(typeof data, data);
+       >             let p = document.getElementById('info');
+       >             p.innerText = '当前价格: ' + data['0000001'].name + ':' + data['0000001'].price;
+       >         }
+       >     </script>
+       > </body>
+       > ```
+
+    4. CORS
+
+       HTML5 新跨域方法, 是 HTML5 规范定义的如何跨域访问资源
+
+       跨域资源共享(CORS) 是一种基于 HTTP 头的机制, 允许服务器除了它自己以外的其他 origin(域,协议,端口) 访问
+
+16. Promise
 
 
+
+17. Canvas
+
+    通过 JavaScript 绘制动画;游戏画面;数据可视化;图片编辑;实时视频处理
+
+    在 canvas 标签内定义宽高, 如果在标签里面添加其他内容, 不支持 canvas 的浏览器会忽略掉 canvas 并渲染里面的内容, 如果浏览器支持 canvas 那么浏览器会忽视 canvas 里面的内容
+
+    >```html
+    ><canvas id="demo" width="150px" height="150px">
+    >	<p>
+    >        你的浏览器不支持
+    >    </p>
+    ></canvas>
+    ><script>
+    >    function draw() {
+    >        // 获取 canvas 元素
+    >        const canvas = document.getElementById('demo');
+    >        // 获得渲染上下文和绘画功能, 如果浏览器不支持, 则不能创建成功
+    >        // 
+    >        if (canvas.getContext) {
+    >            const ctx = canvas.getContext('2d');     
+    >        } else {
+    >            alert('浏览器不支持 canvas');
+    >        }
+    >    }
+    ></script>
+    >```
+
+    ##### 绘制矩形
+
+    >```javascript
+    ><script>
+    >    function draw() {
+    >        // 获取 canvas 元素
+    >        const canvas = document.getElementById('demo');
+    >        // 获得渲染上下文和绘画功能, 如果浏览器不支持, 则不能创建成功
+    >        // 
+    >        if (canvas.getContext) {
+    >            const ctx = canvas.getContext('2d');
+    >            // 填充的颜色
+    >            ctx.fillStyle = 'yellow';
+    >            // fillRect(x, y, width, height)
+    >            // 绘制一个距 x 轴 25px,距 y 轴 25px 的矩形,其宽高 100px
+    >            ctx.fillRect(25, 25, 100, 100);
+    >            // clearRect(x, y, width, height)
+    >            // 清除指定矩形区域,始其变透明
+    >            ctx.clearRect(45, 45, 60, 60);
+    >            // 绘制一个矩形边框
+    >            ctx.skrokeRect(50, 50, 50, 50);
+    >        } else {
+    >            alert('浏览器不支持 canvas');
+    >        }
+    >    }
+    ></script>
+    >```
+
+    ##### 绘制路径
+
+    * beginPath();  新建一条路径
+    * moveTo(x, y); 路径起始点,改变 xy 可以更改坐标,让绘制点发生改变
+    * lineTo(x, y); 规定 moveTo 起始点后,由 lineTo 绘制线, xy 确定终点坐标
+    * stroke(); 用线条来绘制图形轮廓
+    * fill(); 填充路径的内容区域生成失心图形, 调用 fill() 后自动闭合,不再需要 closePath()
+    * close Path(); 闭合路径,绘制命令重新指向上下文 ctx
+
+    > ```javascript
+    > function draw() {
+    >     const canvas = document.getElementById('demo');
+    >     console.log(canvas);
+    >     if (canvas.getContext) {
+    >         const ctx = canvas.getContext('2d');
+    >         ctx.fillStyle = 'yellow';
+    >         ctx.beginPath();
+    >         ctx.moveTo(75, 50);
+    >         ctx.lineTo(100, 75);
+    >         ctx.lineTo(100, 25);
+    >         ctx.stroke();
+    >         ctx.closePath();
+    >         // 调用 fill() 将绘制一个实心三角形
+    >         // ctx.fill();
+    >     } else {
+    >         alert('不支持')
+    >     }
+    > 
+    > }
+    > ```
+
+    设置线条属性
+
+    > lineWidth = value; 线宽
+    >
+    > lineCap = type; 线条末端样式 默认 butt, 还有 round 和 square
+    >
+    > lineJoin = type; 线条与线条结合处的样式 默认 miter, 还有 round 和 bevel
+    >
+    > miterLimit = value; 限制两条线相交时交接处最大长度
+    >
+    > setLineDash(segments); 设置当前虚线样式
+    >
+    > lineDashOffset = value;  设置虚线样式的起始偏移量
+
+    ##### 圆弧
+
+    `arc(x, y, radius, startAngle, endAngel, anticlockwise)`
+
+    画一个以 (x,y) 为圆心, radius 为半径的圆(圆弧), 从 startAngel 开始, endAngle 结束, 按照 anticlockwise 给定方向(默认为 false:顺时针; true 逆时针)来生成, 
+
+    >**注意：`arc()`函数中表示角的单位是弧度，不是角度。角度与弧度的js表达式:**
+    >
+    >**弧度=(Math.PI/180)\*角度。**
+
+    示例
+
+    > ```javascript
+    > function draw() {
+    >     const canvas = document.getElementById('demo');
+    >     if (canvas.getContext) {
+    >         const ctx = canvas.getContext('2d');
+    >         ctx.fillStyle = 'yellow';
+    >         for (var i = 0; i < 4; i++) {
+    >             for (var j = 0; j < 3; j++) {
+    >                 let
+    >                 	x = 25 + j * 50,
+    >                 	y = 25 + i * 50,
+    >                 	radius = 20,
+    >                     startAngle = 0,
+    >                     endAngle = Math.PI + (Math.PI * j) / 2,
+    >                 	anticlockwise = i % 2 == 0 ? false : true;
+    >                 ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise);
+    >                 if (i > 1) {
+    >                     ctx.stroke();
+    >                 } else {
+    >                     ctx.fill();
+    >                 }
+    >             }
+    >             
+    >         }
+    >     }
+    > }
+    > ```
+
+    ##### 二次贝塞尔曲线和三次贝塞尔曲线
+
+    * quadraticCurveTo(cp1x, cp2y, x, y); 绘制二次贝塞尔曲线, cp1x,cp1y 为一个控制点, x y 为结束点
+    * bezierCurveTo(cp1x, xp1y, cp2x, xp2y, x, y); 绘制三次贝塞尔曲线, cp1x,xp1y, 为控制点一, cp2x,cp2y,为控制点二, x y 为结束点
+
+    >```javascript
+    >function draw4() {
+    >    var canvas = document.getElementById('demo');
+    >    if (canvas.getContext) {
+    >        let ctx = canvas.getContext('2d');
+    >        // 二次贝塞尔曲线
+    >        ctx.beginPath();
+    >        ctx.moveTo(75, 25); // 起始点
+    >        ctx.quadraticCurveTo(25, 25, 25, 62.5);
+    >        ctx.quadraticCurveTo(25, 100, 50, 100);
+    >        ctx.quadraticCurveTo(50, 120, 30, 125);
+    >        ctx.quadraticCurveTo(60, 120, 65, 100);
+    >        ctx.quadraticCurveTo(125, 100, 125, 62.5);
+    >        ctx.quadraticCurveTo(125, 25, 75, 25);
+    >        ctx.stroke();
+    >    }
+    >}
+    >
+    >function draw5() {
+    >    var canvas = document.getElementById('demo');
+    >    if (canvas.getContext) {
+    >        var ctx = canvas.getContext('2d');
+    >        ctx.fillStyle = 'red';
+    >        //三次贝塞尔曲线画一个心形
+    >        ctx.beginPath();
+    >        ctx.moveTo(75, 40);
+    >        ctx.bezierCurveTo(75, 37, 70, 25, 50, 25);
+    >        ctx.bezierCurveTo(20, 25, 20, 62.5, 20, 62.5);
+    >        ctx.bezierCurveTo(20, 80, 40, 102, 75, 120);
+    >        ctx.bezierCurveTo(110, 102, 130, 80, 130, 62.5);
+    >        ctx.bezierCurveTo(130, 62.5, 130, 25, 100, 25);
+    >        ctx.bezierCurveTo(85, 25, 75, 37, 75, 40);
+    >        ctx.fill();
+    >    }
+    >}
+    >```
+
+    ##### Path2D 对象
+
+    >new Path2D(); // 创建一个空的 Path 对象
+    >
+    >new Path2D(path); // 克隆 Path 对象
+
+    利用 Path2D 创建的对象去调用绘画命令, 绘制的图画会被缓存和记录, 通过 fill(path) 或 stroke(path) 调用后,才会显示在 canvas 幕布上
+
+    ##### 色彩
+
+    >fillStyle = color; 图形填充颜色
+    >
+    >strokeStyle = color;  图形轮廓颜色
+    >
+    >globalAlpha = transparencyValue; canvas 里所有图形透明度, 数值 1~0 
+    >
+    >fillStyle = 'rgba()'
+
+    ##### 渐变 gradients
+
+    >creatLinnearGradient(x1, y1, x2, y2);
+
+    渐变起点 (x1,y1),终点(x2,y2)
+
+    >createRadialGradient(x1,y1,r1,x2,y2,r2);
+
+    (x1,y1) 为原点, 半径 r1 的圆, (x2,y2) 为原点, 半径 r2 的圆
+
+    > addColorStop(position, color);
+
+    position 为 0~1之间(相当于大小的百分比位置)
+
+    示例
+
+    > ```javascript
+    > function draw6() {
+    >     const ctx = document.getElementById('demo').getContext('2d');
+    >     // 创建 creatLinnearGradient 渐变
+    >     const lingrad = ctx.createLinearGradient(0, 0, 0, 150);
+    >     lingrad.addColorStop(0, '#00ABEB');
+    >     lingrad.addColorStop(0.5, '#fff');
+    >     lingrad.addColorStop(0.5, '#26C000');
+    >     lingrad.addColorStop(1, '#fff');
+    > 
+    >     const lingrad2 = ctx.createLinearGradient(0, 50, 0, 95);
+    >     lingrad2.addColorStop(0.5, '#000');
+    >     lingrad2.addColorStop(1, 'rgba(0,0,0,0)');
+    > 
+    >     // 将渐变赋值给填充和边框
+    >     ctx.fillStyle = lingrad;
+    >     ctx.strokeStyle = lingrad2;
+    >     // 创建边框和填充位置和大小
+    >     ctx.fillRect(10, 10, 130, 130);
+    >     ctx.strokeRect(50, 50, 50, 50);
+    > }
+    > ```
+
+    ##### 图案样式 Patterns
+
+    > createPattern(image, type)
+
+    type : repeat, rpeat-x, repeat-y, no-repeat
+
+    用 onload 事件判断图片是否加载完成, 加载完成后再 createPattern
+
+    ##### 阴影 Shadows
+
+    > shadowOffsetX = float;
+    >
+    > shadowOffsetY = float;
+    >
+    > shadowBlur = float;
+    >
+    > shadowColor = color;
+
+    ##### 绘制文本
+
+    > fillText(text, x, y [, maxWidth]);
+
+    在指定的(x,y) 后填充指定文本
+
+    > strokeText(text, x, y [, maxWidth]);
+
+    在指定(x,y) 位置绘制文本边框
+
+    样式
+
+    > font = value;
+
+    绘制文本样式, 包括字体大小和字体类型
+
+    > textAlign = value;
+
+    文本对齐方式, 默认 start, 还有 end, left, right 和 center
+
+    > textBaseline = value;
+
+    基线对齐选项, 默认 alphabetic, 还有 top, hanging, middle, ideographic, bottom
+
+    > direction = value;
+
+    文本方向,默认 inherit, 还有 ltr, rtl
 
 ## BOM
 
