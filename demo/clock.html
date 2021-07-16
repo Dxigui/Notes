@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock</title>
+</head>
+
+<body>
+    <canvas id="demo" width="400px" height="400px">
+        <p>ERROR</p>
+    </canvas>
+
+    <script>
+        (function draw11() {
+            const ctx = document.getElementById('demo').getContext('2d');
+            let
+                now = new Date(),
+                hr = now.getHours(),
+                min = now.getMinutes(),
+                sec = now.getSeconds();
+            hr = hr > 12 ? hr - 12 : hr;
+            // console.log(hr, min, sec);
+
+            // 表背景
+            ctx.save();
+            ctx.clearRect(0, 0, 300, 300);
+            ctx.translate(170, 170);
+            ctx.rotate(-Math.PI / 2);
+            let lingra = ctx.createLinearGradient(150, 0, -150, 0);
+            lingra.addColorStop(0, '#2F3B42');
+            lingra.addColorStop(1, '#333F47');
+            ctx.fillStyle = lingra;
+            ctx.arc(0, 0, 150, 0, Math.PI * 2, false);
+            ctx.fill();
+
+            // 小时刻度
+            ctx.save();
+            for (let i = 0; i < 12; i++) {
+                // console.log('hr')
+                ctx.beginPath();
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#fff';
+                ctx.rotate(Math.PI / 6);
+                ctx.moveTo(140, 0);
+                ctx.lineTo(120, 0);
+                ctx.stroke();
+                ctx.closePath();
+            }
+            ctx.restore();
+            // 分钟刻度
+            ctx.save();
+            for (let i = 0; i < 60; i++) {
+                ctx.beginPath();
+                ctx.strokeStyle = '#516978';
+                ctx.lineWidth = 2;
+                if (i % 5 != 0) {
+                    ctx.moveTo(140, 0);
+                    ctx.lineTo(130, 0);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+                ctx.rotate(Math.PI / 30);
+            }
+            ctx.restore();
+
+            // 时间数字
+            ctx.save();
+            ctx.rotate(Math.PI / 2);
+            ctx.fillStyle = '#516978';
+            ctx.font = '30px Microsoft Yahei'
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('12', 0, -100);
+            ctx.fillText('3', 100, 0);
+            ctx.fillText('6', 0, 100);
+            ctx.fillText('9', -100, 0);
+            ctx.restore();
+            // 小时
+            ctx.save();
+            ctx.rotate(hr * (Math.PI / 6) + min * (Math.PI / 360) + sec * (Math.PI / 21600));
+            ctx.beginPath();
+            ctx.strokeStyle = '#FFF';
+            ctx.lineWidth = 8;
+            ctx.lineCap = 'round';
+            ctx.moveTo(90, 0);
+            ctx.lineTo(0, 0);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.lineWidth = 10;
+            ctx.moveTo(-20, 0);
+            ctx.lineTo(0, 0);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.arc(80, 0, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+            // 分钟
+            ctx.save();
+            ctx.rotate(min * (Math.PI / 30) + sec * (Math.PI / 1800));
+            ctx.beginPath();
+            ctx.strokeStyle = '#FFF';
+            ctx.lineWidth = 6;
+            ctx.lineCap = 'round';
+            ctx.moveTo(100, 0);
+            ctx.lineTo(0, 0);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.lineWidth = 10;
+            ctx.moveTo(-30, 0);
+            ctx.lineTo(0, 0);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#303C43';
+            ctx.moveTo(90, 0);
+            ctx.lineTo(80, 0);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+            // 秒钟
+            ctx.save();
+            ctx.rotate(sec * (Math.PI / 30));
+            ctx.beginPath();
+            ctx.strokeStyle = '#FFF';
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 4;
+            ctx.moveTo(120, 0);
+            ctx.lineTo(0, 0);
+            ctx.stroke();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.lineWidth = 10;
+            ctx.moveTo(-40, 0);
+            ctx.lineTo(0, 0);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+
+
+            // 交叉圆心
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = '#FFF';
+            ctx.strokeStyle = '#FFF';
+            ctx.arc(0, 0, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.strokeStyle = '#000';
+            ctx.arc(0, 0, 5, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.lineWidth = 13.4;
+            ctx.strokeStyle = '#325FA2';
+            ctx.arc(0, 0, 152, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.restore();
+
+            window.requestAnimationFrame(draw11)
+
+        })();
+    </script>
+</body>
+
+</html>
