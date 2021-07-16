@@ -372,6 +372,21 @@
        apply 可以规定 this 指向, apply() 接受两个参数, 第一个是 this 要绑定的变量,第二个是函数本身的参数,是一个数组
 
        call() 和 apply() 作用相同,区别在于 apply() 把函数参数以**数组** 传入, call() 把参数依次按顺序传入
+       
+       > ```js
+       > // 两个数组拼接 不改变原数组,返回新数组
+       > function concat(arr1, arr2) {
+       >     // slice(index) 截取数组 arr1 不改变原来数组
+       >     // index 为开始截取位置
+       >     let newArr = arr1.slice(0);
+       >     // [].push 看成一个整体,是一个函数
+       >     // apply 方法让 arr2 以 [].push 形式作用到 newArr
+       >     [].push.apply(newArr, arr2);
+       >     return newArr;
+       > }
+       > ```
+       
+       
 
 12. 高阶函数
 
@@ -774,8 +789,9 @@ class 创建类后,继承也是 class 关键字和 extends
     >var request = new XHMHttpReuqeust();
     >// 当 readState 的值改变时, function 回调函数就会被调用
     >request.onreadstatechange = function() {
+    >    // readState 为 4 时,请求全部加载完成
     >	if (request.readState === 4) {
-    >		//
+    >		// HTTP 状态码
     >		if (request.status === 200) {
     >			//
     >			return success(request.responseText);
@@ -931,7 +947,7 @@ class 创建类后,继承也是 class 关键字和 extends
     > }
     > ```
 
-    设置线条属性
+    ##### 设置线条属性
 
     > lineWidth = value; 线宽
     >
@@ -1129,6 +1145,183 @@ class 创建类后,继承也是 class 关键字和 extends
     > direction = value;
 
     文本方向,默认 inherit, 还有 ltr, rtl
+    
+    ##### 状态保存和恢复
+    
+    在 canvas 状态保存和恢复的方法为 **save() 和 restore()** ,save() 会把当前的所有状态保存到**栈**中,restore() 会把最近一次保存的状态恢复, save() 和 restore() 可以多次保存和恢复, 每次保存和恢复都是进栈和出栈操作
+    
+    ##### 旋转变形
+    
+    > translate(x,y);
+    
+    移动当前绘画的原点, 下次 translate 时,依据当前 translate 的原点移动
+    
+    > rotate(angle);
+    
+    旋转角度, 顺时针旋转, 旋转中心始终是 canvas 原点;**绘制的图形不旋转,只旋转坐标系**
+    
+    > scale(x,y);
+    
+    缩放布画, x,y 为正数时放大, x,y 为负数时缩小
+    
+    > transform(a,b,c,d,e,f);
+    
+    a: 水平方向缩放; b: 竖直方向的倾斜偏移; c: 水平方向的倾斜偏移; d: 竖直方向的缩放; e: 水平方向的移动; f: 竖直方向的移动; 如果任意参数为 infinity, 变形矩阵必须被标记为无限大,否则抛出异常
+    
+    > setTransform(a,b,c,d,e,f);
+    
+    将当前的变形矩阵重置为单位矩阵
+    
+    > resetTransform();
+    
+    重置当前变形为单位矩阵
+    
+    ##### 组合
+    
+    在已有的图形上绘制新的图形, 已有图形和新图形的组合方式不同呈现出来的效果也不同
+    
+    > globalCompositeOperation = type;
+    
+    这个属性设定了在画新图形时采用的遮盖策略,[12种遮盖方式](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Compositing/Example)
+    
+    ##### 裁剪路径
+    
+    > clip();
+    
+    将当前正在构建的路径转换为当前的裁剪路径
+    
+    > ```js
+    > function draw9() {
+    >     const ctx = document.getElementById('demo').getContext('2d');
+    >     ctx.fillRect(0, 0, 150, 150);
+    >     // 移动原点
+    >     ctx.translate(75, 75);
+    >     // 绘制一个圆,并用 clip() 方法裁切,
+    >     // 裁切掉圆外绘制的图形,只保留圆内的
+    >     ctx.beginPath();
+    >     ctx.arc(0, 0, 60, 0, Math.PI * 2);
+    >     ctx.clip();
+    >     // 绘制一个渐变背景
+    >     const lingrad = ctx.createLinearGradient(0, -75, 0, 75);
+    >     lingrad.addColorStop(0, '#232256');
+    >     lingrad.addColorStop(1, '#143778');
+    >     ctx.fillStyle = lingrad;
+    >     ctx.fillRect(-75, -75, 150, 150);
+    >     // 随机位置绘制星星
+    >     for (var j = 1; j < 50; j++) {
+    >         ctx.save();
+    >         ctx.fillStyle = '#fff';
+    >         // 随机移动原点
+    >         ctx.translate(75 - Math.floor(Math.random() * 150),
+    >             75 - Math.floor(Math.random() * 150));
+    >         // 绘制星星函数,并随即设置大小
+    >         drawStar(ctx, Math.floor(Math.random() * 4) + 2);
+    >         ctx.restore()
+    >     }
+    > }
+    > 
+    > function drawStar(ctx, r) {
+    >     ctx.save();
+    >     ctx.beginPath();
+    >     ctx.moveTo(r, 0);
+    >     for (var i = 0; i < 9; i++) {
+    >         // 旋转坐标轴
+    >         ctx.rotate(Math.PI / 5);
+    >         ctx.strokeStyle = `rgb(${255-20*i},${255-10*i},${20*i})`;
+    >         // 交替绘制
+    >         if (i % 2 == 0) {
+    >             ctx.lineTo((r / 0.525731) * 0.200811, 0);
+    >         } else {
+    >             ctx.lineTo(r, 0)
+    >         }
+    >     }
+    >     ctx.stroke();
+    >     ctx.closePath();
+    >     ctx.fill();
+    > 
+    >     ctx.restore();
+    > }
+    > ```
+    
+    ##### 动画
+    
+    动画的每一帧的步骤
+    
+    1. 清空 canvas : clearRect() 清空画布
+    2. 保存 canvas 状态 : 改变一些改变 canvas 状态的设置(样式,变形等)时,又要在每一帧之时都是原始状态,就先保存
+    3. 绘制动画图形 : 
+    4. 恢复 canvas 状态 : 如果有保存 canvas 状态, 先恢复,然后开始重绘下一帧
+    
+    更新画布的三种方法, 是图形一帧帧播放,达到动画效果
+    
+    > setInterval(function, delay)
+    
+    设定事件后定期执行 function
+    
+    > setTimeout(function, delay);
+    
+    设定事件后定期执行 function
+    
+    > requestAnimationFrame(callback);
+    
+    请求执行一个动画, 根据 callback 回调函数来更新动画, 此方法一般每秒执行 60 次或者和屏幕刷新率一致
+    
+    示例:
+    
+    太阳系动画
+    
+    > ```js
+    > var
+    > 	sun = new Image(),
+    > 	earth = new Image(),
+    > 	moon = new Image();
+    > function init() {
+    >     sun.src = 'https://mdn.mozillademos.org/files/1456/Canvas_sun.png';
+    >   	moon.src = 'https://mdn.mozillademos.org/files/1443/Canvas_moon.png';
+    >   	earth.src = 'https://mdn.mozillademos.org/files/1429/Canvas_earth.png';
+    >     // 请求动画
+    >     window.requestAnimationFrame(draw);
+    > }
+    > function draw() {
+    >     const ctx = document.getElementById('demo').getContext('2d');
+    >     // 设置多绘画组合方式
+    >     ctx.globalCompositeOperation = 'destination-over';
+    >     ctx.clearRect(0,0,300,300);
+    >     
+    >     ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    >  	ctx.strokeStyle = 'rgba(0,153,255,0.4)';
+    >     ctx.save();
+    >     ctx.translate(150,150);
+    >     // 地球; 先 rotate 再 translate
+    >     let time = new Date();
+    >     ctx.rotate((Math.PI*2/60)*time.getseconds() + (Math.PI*2/60000)*time.getMilliseconds());
+    >     ctx.translate(105,0);
+    >     ctx.drawImage(earth, -12, -12);
+    >     ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    >     ctx.fillRect(-12,0,40, 12);
+    >     ctx.save();
+    >     // 月亮
+    >     ctx.rotate((Math.PI*2/6)*time.getseconds() + (Math.PI*2/6000)*time.getMilliseconds());
+    >     ctx.translate(0, 28.5);
+    >     ctx.drawImage(moon, -3.5, -3.5);
+    >     // 恢复 canvas 存储状态
+    >     ctx.restore();
+    >     ctx.restore();
+    >     
+    >     ctx.beginPath();
+    >     ctx.arc(150,150,105,0,Math.PI*2);
+    >     ctx.stroke();
+    >     ctx.closePath();
+    >     
+    >     ctx.drawImage(sun, 0, 0, 300, 300);
+    >     window.requestAnimationFrame(draw);
+    > }
+    > init()
+    > ```
+    >
+    > 
+    
+    
 
 ## BOM
 
