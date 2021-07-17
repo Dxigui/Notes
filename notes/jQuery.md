@@ -107,3 +107,8 @@ jQuery 对象和 DOM 对象之间可以相互转化:
 	> var nextDiv = div.next('div.test5');
 #### 过滤
 
+* filter() 过滤掉不符合选择条件的节点
+
+
+
+* map() 把 jQuery 对象包含的若干 DOM 节点转化为其他对象
