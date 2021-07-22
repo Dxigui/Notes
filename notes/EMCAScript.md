@@ -289,8 +289,41 @@ tips:
 >     console.log(v);
 > }
 > ```
+
+#### 生成器
+
+异步任务
+
+> // 创建
+>
+> function * gen(){
+>
+> ​	yield '生成器'
+>
+> }
+>
+> // 调用 next() 方法 和 for of
+>
+> let iter = gen();
+>
+> iter.next();
 >
 > 
 
+### Promise
 
+Promise 对象的几种状态
+
+* pending: 初始状态,即正在执行, 不处于 fulfilled 或 rejected
+* fulfilled : 成功的完成了操作
+* rejected : 失败
+* settled : Promise 处于 fulfilled 或者 rejected 二者中的任意状态
+
+### 模块化
+
+ES6 之前模块化规范: CommonJS / AMD / CMD
+
+ES6 数据导出 export
+
+ES6 数据导入 import * as m from filepath;
 

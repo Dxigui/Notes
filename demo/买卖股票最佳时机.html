@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var maxProfit = function (prices) {
+        let profit = 0,
+          low = null,
+          high = 0;
+        if (prices.length <= 1) {
+          return profit;
+        }
+        for (let i = 1; i < 4; i++) {
+          if (prices[i] > prices[i - 1]) low = i - 1;
+          if (prices[i + 1] < prices[i]) high = i;
+          console.log(high, low, i);
+          if (high > low && low !== null) {
+            profit = profit + prices[high] - prices[low];
+            [high, low] = [0, 0];
+          }
+          console.log(profit);
+          if (
+            i === prices.length - 2 &&
+            high === 0 &&
+            prices[i + 1] > prices[i]
+          ) {
+            profit = prices[prices.length - 1] - prices[0];
+          }
+        }
+
+        return profit;
+      };
+
+      console.log(maxProfit([7, 6, 4, 3, 1]));
+
+      if (
+        [7, 1, 5, 3, 6, 4].length === 1 ||
+        [7, 1, 5, 3, 6, 4].sort((a, b) => (a > b ? -1 : 1)).join("") ===
+          [7, 1, 5, 3, 6, 4].join("")
+      ) {
+        console.log("shabi");
+      }
+      let a = [];
+      a.find()
+    </script>
+  </body>
+</html>

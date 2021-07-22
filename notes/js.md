@@ -217,10 +217,12 @@
 
    2. Set
 
+      Set 对象可以存储任意类型的唯一值,
+
       创建 Set : `var s = new Set();`  Set 是不含 value 的 key 集合,
 
       s.add(key)
-
+      
       s.delete(key)
 
    Map 和 Set 都是 ES6 提出, 是能 iterable 类型,可以通过 for ... of 循环遍历
@@ -259,7 +261,7 @@
    >
    >// Map
    >
-   >var m = new Map();
+   >var m = new Map([['foo', 3], ['bar', {}], ['baz', undefined]]);
    >
    >m.forEach(function(value, key, map){
    >
@@ -786,10 +788,10 @@ class 创建类后,继承也是 class 关键字和 extends
     >	var textarea = document.getElementById('response-info');
     >	textarea.value = text;
     >}
-    >var request = new XHMHttpReuqeust();
+    >var request = new XHMHttpRequest();
     >// 当 readState 的值改变时, function 回调函数就会被调用
     >request.onreadstatechange = function() {
-    >    // readState 为 4 时,请求全部加载完成
+    >// readState 为 4 时,请求全部加载完成
     >	if (request.readState === 4) {
     >		// HTTP 状态码
     >		if (request.status === 200) {
@@ -805,6 +807,30 @@ class 创建类后,继承也是 class 关键字和 extends
     >}
     >request.open('GET', url);
     >request.send();
+    >
+    >// Promise 修改 AJAX 请求 异步处理
+    >const p = new Promise((resolve, reject) =>{
+    >    const url = url;
+    >    const xhr = new XHMHttpRequest();
+    >    xhr.open('GET', url);
+    >    xhr.send();
+    >    xhr.onreadstatechange = function() {
+    >        if (xhr.readState === 4) {
+    >            if (xhr.status >= 200 && xhr.status < 300) {
+    >                resolve(xhr.respose);
+    >            } else {
+    >                reject(xhr.status);
+    >            }
+    >           
+    >        }
+    >    }
+    >})
+    >// then 里面函数还可以嵌套 P
+    >p.then(function(value){
+    >    console.log(value)
+    >},function(reason){
+    >    console.log(reason)
+    >})
     >```
 
     ##### readyState 状态码
