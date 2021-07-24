@@ -168,3 +168,64 @@ vue 中 url 和组件的映射
 // active-class="" 将 router-link 的默认 class,同样也可以在 router 路由中添加 linkActiveClass 属性
 ```
 
+### 守卫
+
+全局守卫
+
+`router.beforeEach(func) / router.aftereach`
+
+路由独享守卫
+
+组件守卫
+
+
+
+### Vuex
+
+安装
+
+`npm install vuex --save`
+
+创建
+
+`const vuex = new vuex.store({})`
+
+参数
+
+* state
+* getters
+* mutations
+* actions
+* modules
+* plugins
+* strict: boolean
+
+### axios
+
+#### 请求方式
+
+* axios(config)
+* axios.request(config)
+* axios.get(url[, config])
+* axios.delet(url[, config])
+* axios.head(url[, config])
+* axios.post(url[,data[,config]])
+* axios.put(url[,data[, config]])
+* axios.patch(url[ data[, cofig]])
+
+
+
+
+
+
+
+### 生态
+
+* Quasar
+* Element Plus
+* Ant Design Vue
+* Vuetify
+* Nuxt 3
+* vite
+* VuePress/vitePress
+* Volar 类型检查 + vue-tsc
