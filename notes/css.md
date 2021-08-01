@@ -711,3 +711,52 @@
        * -webkit-top-highlight-color: transparent;  点击链接高亮清除
        * -webkit-appearance: none;  清除移动端浏览器默认样式
        * img, a {-webkit-touch-callout:none}  禁止长安页面时弹出菜单
+    
+27. flex 布局
+
+    flex 布局后, 子元素 float/clear/vertical-aglin 会失效
+
+    1. 父元素样式设置
+
+       * flex-direction: 设置主轴方向
+
+       * justify-content: 设置主轴上的子元素排列方式
+
+         |     属性      |           说明            |
+         | :-----------: | :-----------------------: |
+         |  flex-start   |     默认值,从头部开始     |
+         |   flex-end    |      从尾部开始排列       |
+         |    center     |      在主轴居中对齐       |
+         | space-around  |       平分剩余空间        |
+         | space-between | 先两边贴边,再平分剩余空间 |
+
+         
+
+       * flex-wrap: 设置子元素是否换行
+
+       * align-content: 设置侧轴上的子元素的排列方式(多行)
+
+       * align-items: 设置侧轴上的子元素排列方式(单行)
+
+       * flex-flow: 复合属性,相当于设置了 flex-direction 和 flex-wrap
+
+    2. 子元素样式
+
+       * flex: 定义子元素分配剩余空间
+       * align-self: 设置子元素侧轴分布, 可以单独对某一个子元素设置
+
+28. 流式布局
+
+
+
+
+
+29. rem
+
+    1. rem => root em
+
+       1
+
+    2. 媒体查询
+
+       `media screen and (max-width: 800px) {html: {font-size: 12px;}}
